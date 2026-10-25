@@ -1,16 +1,16 @@
 {
   "name": "الأستاذ محمد عطية",
-  "title": "معلم ومربي تعليمي",
-  "bio": "مساحة تعليمية تفاعلية منظمة لشرح وتبسيط المناهج الدراسية بأساليب حديثة، مساعدة الطلاب في المتابعة، والتقويم الذاتي المستمر.",
-  "avatar": "/assets/brand/teacher-placeholder.svg",
-  "logo": "/assets/brand/logo-placeholder.svg",
+  "title": "معلم اللغة العربية للمرحلة الابتدائية",
+  "bio": "خريج كلية دار العلوم بجامعة الفيوم، ومتخصص في تعليم اللغة العربية للصفوف الرابع والخامس والسادس الابتدائي. أقدّم تعلمًا واضحًا ومحفّزًا من خلال الشرح المبسّط والوسائل الرقمية والأنشطة التفاعلية.",
+  "avatar": "/assets/images/teacher-mohamed-atiya.webp",
+  "logo": "",
   "contact": {
-    "email": "m.adelhelal2024@gmail.com",
+    "email": "",
     "phone": "",
     "whatsapp": "",
     "telegram": "",
-    "youtube": "https://www.youtube.com"
+    "youtube": ""
   },
-  "accentColor": "#2563EB",
-  "secondaryColor": "#F59E0B"
+  "accentColor": "#2457A7",
+  "secondaryColor": "#BE9234"
 }

@@ -4,6 +4,7 @@ import { AppShell } from './components/AppShell';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { HomePage } from './pages/HomePage';
 import { CurriculumPage } from './pages/CurriculumPage';
+import { GradeSixTermOnePage } from './pages/GradeSixTermOnePage';
 import { UnitPage } from './pages/UnitPage';
 import { LessonPage } from './pages/LessonPage';
 import { BoardPage } from './pages/BoardPage';
@@ -19,6 +20,7 @@ export const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/curriculum" element={<CurriculumPage />} />
+            <Route path="/grade-six/term-one" element={<GradeSixTermOnePage />} />
             <Route path="/unit/:unitId" element={<UnitPage />} />
             <Route path="/lesson/:lessonId" element={<LessonPage />} />
             <Route path="/board" element={<BoardPage />} />

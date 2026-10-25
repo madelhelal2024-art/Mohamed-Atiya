@@ -21,6 +21,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const navLinks = [
     { label: 'الرئيسية', path: '/' },
     { label: 'المنهج والدروس', path: '/curriculum' },
+    { label: 'الصف السادس', path: '/grade-six/term-one' },
     { label: 'السبورة التفاعلية', path: '/board' },
     { label: 'الملف والتقدم', path: '/profile' },
     { label: 'البرامج والدورات', path: '/programs' },
@@ -60,11 +61,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.75rem 1.5rem', gap: '1rem', flexWrap: 'wrap' }}>
           {/* Logo & Teacher Title */}
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
-            <BrandImage
-              src={teacherData.logo || '/assets/brand/logo-placeholder.svg'}
-              alt={teacherData.name}
-              style={{ width: '42px', height: '42px', borderRadius: '10px', objectFit: 'contain' }}
-            />
+            {teacherData.logo && (
+              <BrandImage
+                src={teacherData.logo}
+                alt={teacherData.name}
+                style={{ width: '42px', height: '42px', borderRadius: '10px', objectFit: 'contain' }}
+              />
+            )}
             <div>
               <h1 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#0f172a', lineHeight: 1.2 }}>
                 {teacherData.name}

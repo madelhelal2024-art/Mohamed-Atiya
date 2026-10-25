@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
       {/* Hero Section */}
       <section
         style={{
-          background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)',
+          background: 'linear-gradient(135deg, #2457A7 0%, #183C72 100%)',
           borderRadius: 'var(--radius-lg)',
           padding: '2.5rem',
           color: '#ffffff',
@@ -38,12 +38,12 @@ export const HomePage: React.FC = () => {
           <BrandImage
             src={teacherData.avatar || '/assets/brand/teacher-placeholder.svg'}
             alt={teacherData.name}
-            style={{ width: '110px', height: '110px', borderRadius: '50%', border: '4px solid #38BDF8', objectFit: 'cover' }}
+            style={{ width: '175px', height: '218px', borderRadius: '22px', border: '4px solid #F0D38D', objectFit: 'cover', objectPosition: 'center 24%', boxShadow: '0 12px 32px rgba(0,0,0,.24)' }}
           />
 
           <div style={{ maxWidth: '700px' }}>
-            <span className="badge" style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38BDF8', marginBottom: '0.75rem' }}>
-              مرحباً بك في المنصة التعليمية
+            <span className="badge" style={{ background: 'rgba(240, 211, 141, 0.18)', color: '#F0D38D', marginBottom: '0.75rem' }}>
+              نتعلّم العربية بإبداع
             </span>
             <h1 style={{ fontSize: '2.2rem', fontWeight: 800, marginBottom: '0.75rem', lineHeight: 1.25 }}>
               {teacherData.name}
@@ -56,6 +56,9 @@ export const HomePage: React.FC = () => {
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
             <Link to="/curriculum" className="btn-primary" style={{ padding: '0.8rem 1.8rem', fontSize: '1rem' }}>
               تصفح المناهج والدروس 📚
+            </Link>
+            <Link to="/grade-six/term-one" className="btn-secondary" style={{ padding: '0.8rem 1.8rem', fontSize: '1rem', background: '#F0D38D', color: '#183C72', borderColor: '#F0D38D' }}>
+              منهج الصف السادس — الفصل الأول
             </Link>
             <Link to="/board" className="btn-secondary" style={{ padding: '0.8rem 1.8rem', fontSize: '1rem', background: 'rgba(255,255,255,0.1)', color: '#ffffff', borderColor: 'rgba(255,255,255,0.2)' }}>
               السبورة التفاعلية ✏️
