@@ -1,3 +1,2 @@
-# صور الدروس
-ضع هنا الصور التي تملك حق استخدامها، واربطها من ملفات بيانات الدروس بمسارات تبدأ بـ `/assets/lesson-images/`.
-لا يتضمن القالب صورًا خاصة بمعلم أو منهج فعلي.
+# Lesson Images
+Place supplementary images for lessons here.

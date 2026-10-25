@@ -1,269 +1,43 @@
-.student-programs-page {
-  background: radial-gradient(circle at 85% 10%,color-mix(in srgb,var(--color-primary) 8%,transparent),transparent 22rem),transparent;
+.programs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-.student-course-hero {
-  display: grid;
-  gap: 1.25rem;
-  margin-block-end: 1.5rem;
-  padding: 1.5rem;
-  border: 1px solid color-mix(in srgb,var(--color-primary) 25%,var(--border));
+.program-card {
+  background: #ffffff;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg,var(--color-surface),color-mix(in srgb,var(--color-warm-surface) 52%,var(--color-surface)));
-  box-shadow: var(--shadow-sm);
-}
-
-.student-course-hero h2 {
-  margin-block: .8rem .65rem;
-  color: var(--color-secondary);
-  font-size: clamp(1.7rem,5vw,2.6rem);
-}
-
-.student-course-hero p {
-  max-width: 60rem;
-  margin-block-end: .6rem;
-  color: var(--muted);
-}
-
-.student-course-badge,.student-access-tag,.student-access-note {
-  display: inline-flex;
-  align-items: center;
-  gap: .35rem;
-  border-radius: 999px;
-  font-weight: 700;
-}
-
-.student-course-badge {
-  padding: .32rem .7rem;
-  background: color-mix(in srgb,var(--color-primary) 12%,var(--color-surface));
-  color: var(--color-primary);
-  font-size: .82rem;
-}
-
-.student-course-badge svg {
-  width: 16px;
-}
-
-.student-course-price {
-  display: grid;
-  min-width: 180px;
-  align-content: center;
-  justify-items: center;
-  padding: 1.2rem;
-  border-radius: var(--radius-md);
-  background: var(--color-secondary);
-  color: #fff;
-  text-align: center;
-}
-
-.student-course-price small,.student-course-price span {
-  opacity: .8;
-}
-
-.student-course-price strong {
-  color: #fff;
-  font-size: 2rem;
-}
-
-.student-programs-grid {
-  display: grid;
-  gap: 1rem;
-  margin-block-end: 2rem;
-}
-
-.student-info-card,.student-material-card {
-  padding: 1.3rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--color-surface);
-  box-shadow: 0 7px 24px rgba(30,36,28,.045);
-}
-
-.student-card-heading {
+  border: 1px solid var(--border-color);
+  padding: 2rem;
   display: flex;
-  align-items: flex-start;
-  gap: .8rem;
-  margin-block-end: 1rem;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.student-card-heading>svg {
-  width: 44px;
-  height: 44px;
-  padding: .65rem;
-  flex: 0 0 auto;
-  border-radius: .9rem;
-  background: var(--color-warm-surface);
-  color: var(--color-primary);
+.program-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.06);
 }
 
-.student-card-heading h2 {
-  margin: 0;
-  color: var(--color-secondary);
-  font-size: 1.25rem;
+.program-card.restricted {
+  border-top: 4px solid var(--secondary);
 }
 
-.student-card-heading .section-kicker {
-  margin-block-end: .2rem;
-}
-
-.student-benefit-list,.student-steps {
-  display: grid;
-  gap: .8rem;
-  margin: 0;
-  padding: 0;
-}
-
-.student-benefit-list {
+.program-features-list {
   list-style: none;
-}
-
-.student-benefit-list li {
+  margin: 1.5rem 0;
   display: flex;
-  align-items: flex-start;
-  gap: .55rem;
-  color: var(--color-secondary);
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.student-benefit-list svg {
-  width: 19px;
-  flex: 0 0 auto;
-  margin-block-start: .25rem;
-  color: var(--color-accent);
-}
-
-.student-steps {
-  padding-inline-start: 1.35rem;
-  color: var(--color-secondary);
-}
-
-.student-whatsapp-button {
-  margin-block-start: 1.1rem;
-}
-
-.student-section {
-  margin-block: 2rem;
-}
-
-.student-section-heading {
-  display: grid;
-  gap: .5rem;
-  margin-block-end: 1rem;
-}
-
-.student-section-heading h2 {
-  margin: 0;
-  color: var(--color-secondary);
-}
-
-.student-section-heading>p {
-  max-width: 52rem;
-  margin: 0;
-  color: var(--muted);
-}
-
-.student-lecture-grid {
-  display: grid;
-  gap: .9rem;
-}
-
-.student-lecture-card {
-  display: grid;
-  gap: 1rem;
-  padding: 1.1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--color-surface);
-  box-shadow: 0 7px 24px rgba(30,36,28,.045);
-}
-
-.student-lecture-number {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  place-items: center;
-  border-radius: 1rem;
-  background: var(--color-warm-surface);
-  color: var(--color-secondary);
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-
-.student-lecture-card h3 {
-  margin-block: .5rem .3rem;
-  color: var(--color-secondary);
-  font-size: 1.08rem;
-}
-
-.student-lecture-card p {
-  margin: 0;
-  color: var(--muted);
-  font-size: .92rem;
-}
-
-.student-lecture-card .primary-button,.student-lecture-card .secondary-button {
-  align-self: center;
-  justify-self: start;
-}
-
-.student-access-tag {
-  padding: .22rem .58rem;
-  font-size: .76rem;
-}
-
-.student-access-tag.is-free {
-  border: 1px solid #a7f3d0;
-  background: #ecfdf5;
-  color: #065f46;
-}
-
-.student-access-tag.is-locked {
-  border: 1px solid #fde68a;
-  background: #fffbeb;
-  color: #92400e;
-}
-
-.student-material-card {
-  margin-block-start: 2rem;
-}
-
-.student-material-card>p {
-  max-width: 60rem;
-  color: var(--muted);
-}
-
-.student-material-actions {
+.program-features-list li {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: .8rem;
-}
-
-.student-access-note {
-  padding: .3rem .7rem;
-  background: var(--color-warm-surface);
-  color: var(--muted);
-  font-size: .78rem;
-}
-
-.student-programs-page button:disabled {
-  opacity: .65;
-  cursor: not-allowed;
-}
-
-@media (min-width:720px) {
-  .student-course-hero {
-    grid-template-columns: minmax(0,1fr) auto;
-    align-items: center;
-    padding: 2rem;
-  }
-
-  .student-programs-grid {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .student-lecture-card {
-    grid-template-columns: auto minmax(0,1fr) auto;
-    align-items: center;
-  }
-
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  color: #334155;
 }

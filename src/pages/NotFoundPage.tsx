@@ -1,15 +1,19 @@
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { Icon } from '../components/Icon';
-export function NotFoundPage() {
-    return (<section className="not-found-page">
-      <div className="container not-found-card">
-        <span className="not-found-code">404</span>
-        <Icon name="map"/>
-        <h1 id="page-title" tabIndex={-1}>هذا المسار غير موجود</h1>
-        <p>ربما تغيّر الرابط أو لم يعد المحتوى متاحًا بهذا المعرّف.</p>
-        <Link className="primary-button" to="/curriculum">
-          انتقل إلى المناهج <Icon name="arrow-left"/>
-        </Link>
-      </div>
-    </section>);
-}
+
+export const NotFoundPage: React.FC = () => {
+  return (
+    <div style={{ textAlign: 'center', padding: '4rem 1.5rem', maxWidth: '500px', margin: '0 auto' }}>
+      <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔍</div>
+      <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.75rem' }}>
+        الصفحة غير موجودة (404)
+      </h1>
+      <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+        عذراً، الرابط الذي تحاول الوصول إليه غير موجود أو تم نقل محتواه.
+      </p>
+      <Link to="/" className="btn-primary">
+        العودة إلى الصفحة الرئيسية
+      </Link>
+    </div>
+  );
+};

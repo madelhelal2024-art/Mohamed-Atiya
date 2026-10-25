@@ -1,107 +1,175 @@
-import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import { Breadcrumbs } from '../components/Breadcrumbs';
-import { Icon, type IconName } from '../components/Icon';
 import { LessonAccordion } from '../components/LessonAccordion';
-import { findLessonContext, getLessonNeighbors, loadLesson, unitPath, type LessonLoadResult } from '../lib/content';
-import { useLessonProgress } from '../lib/progress';
-import { NotFoundPage } from './NotFoundPage';
-const learningPath: Array<{
-    label: string;
-    icon: IconName;
-}> = [{ label: 'استكشف', icon: 'sparkle' }, { label: 'افهم', icon: 'book' }, { label: 'شاهد', icon: 'video' }, { label: 'طبّق', icon: 'game' }, { label: 'اختبر', icon: 'brain' }, { label: 'راجع', icon: 'clipboard' }];
-export function LessonPage() {
-    const { lessonId = '' } = useParams(), context = findLessonContext(lessonId);
-    const [loadResult, setLoadResult] = useState<LessonLoadResult | null>(null), [attempt, setAttempt] = useState(0);
-    const { isLessonFinished, toggleLessonFinished } = useLessonProgress();
-    useEffect(() => { let active = true; setLoadResult(null); loadLesson(lessonId).then((loaded) => { if (active)
-        setLoadResult(loaded); }); return () => { active = false; }; }, [lessonId, attempt]);
-    if (!context)
-        return <NotFoundPage />;
-    const { level, subject, unit, lesson: lessonReference, lessonIndex } = context, backToUnit = unitPath(level.id, subject.id, unit.id), { previous, next } = getLessonNeighbors(context), finished = isLessonFinished(lessonId);
-    return <section className="page-section lesson-page">
-    <div className="container narrow-container">
-    <Breadcrumbs items={[{ label: 'الرئيسية', to: '/' }, { label: 'المناهج', to: '/curriculum' }, { label: level.title, to: '/curriculum' }, { label: subject.title, to: '/curriculum' }, { label: unit.title, to: backToUnit }, { label: lessonReference.title }]}/>
-    <header className="lesson-hero">
-    <span aria-hidden="true" className="lesson-hero__shape lesson-hero__shape--one"/>
-    <span aria-hidden="true" className="lesson-hero__shape lesson-hero__shape--two"/>
-    <span aria-hidden="true" className="lesson-hero__shape lesson-hero__shape--three"/>
-      <div className="lesson-hero__content">
-    <div className="lesson-hero__eyebrow">
-    <span className="lesson-hero__index">{String(lessonIndex + 1).padStart(2, '0')}</span>
-    <span>الدرس {lessonIndex + 1} من {unit.lessons.length}</span>{finished && <span className="lesson-hero__completed-badge">
-        <Icon name="check-circle"/> تم إنجازه</span>}</div>
-    <h1 id="page-title" tabIndex={-1}>{lessonReference.title}</h1>
-    <div className="lesson-hero__meta" aria-label="بيانات الدرس">
-    <span>
-    <Icon name="book"/> {subject.title}</span>
-    <span>
-    <Icon name="layers"/> {level.title}</span>
-    <span>
-    <Icon name="map"/> {unit.title}</span>
-    </div>
-    </div>
-      <div className="lesson-hero__actions">
-    <button aria-pressed={finished} className={`lesson-status-btn${finished ? ' is-completed' : ''}`} onClick={() => toggleLessonFinished(lessonId)} type="button">
-    <Icon name={finished ? 'check-circle' : 'check'}/>
-    <span>{finished ? 'الدرس مكتمل ✓' : 'تحديد كمكتمل'}</span>
-    </button>
-    <Link className="back-link lesson-hero__back" to={backToUnit}>
-    <Icon name="layers"/> العودة إلى الوحدة</Link>
-    </div>
-      <ol aria-label="مسار التعلّم" className="lesson-path">{learningPath.map((step, index) => <li className="lesson-path__step" key={step.label}>
-        <span className="lesson-path__node">
-        <Icon name={step.icon}/>
-        <span>{step.label}</span>
-        </span>{index < learningPath.length - 1 && <span aria-hidden="true" className="lesson-path__connector"/>}</li>)}</ol>
-    </header>
-    {!loadResult ? <div aria-live="polite" className="lesson-loading">
-        <span />
-        <p>جارٍ فتح الدرس…</p>
-        </div> : loadResult.status === 'ready' ? <>
-        <LessonAccordion key={loadResult.data.id} lesson={loadResult.data}/>
-        <div className={`lesson-completion-card${finished ? ' is-completed' : ''}`}>
-        <div className="lesson-completion-card__info">
-        <span className="lesson-completion-card__icon">
-        <Icon name={finished ? 'check-circle' : 'sparkle'}/>
-        </span>
-        <div>
-        <h3>{finished ? 'أحسنت! هذا الدرس مكتمل' : 'أنهيت مذاكرة هذا الدرس؟'}</h3>
-        <p>{finished ? 'تم تسجيل هذا الدرس ضمن الدروس المنجزة في هذه الوحدة والمنهج الدراسي.' : 'اضغط على الزر لتسجيل إنجازه وحساب نسبته في الوحدة التعليمية.'}</p>
+import { ConfettiBurst } from '../components/ConfettiBurst';
+import { getAdjacentLessons, getLessonById, getUnitById } from '../lib/content';
+import { loadProgress, recordQuizScore, toggleSectionComplete, unlockBadge } from '../lib/storage';
+import { evaluateBadges } from '../lib/badges';
+import { UserProgress } from '../types/content';
+
+export const LessonPage: React.FC = () => {
+  const { lessonId } = useParams<{ lessonId: string }>();
+  const [progress, setProgress] = useState<UserProgress>(loadProgress());
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleUpdate = () => setProgress(loadProgress());
+    window.addEventListener('app:progress-updated', handleUpdate);
+    return () => window.removeEventListener('app:progress-updated', handleUpdate);
+  }, []);
+
+  if (!lessonId) {
+    return <div style={{ padding: '2rem' }}>الدرس غير محدد</div>;
+  }
+
+  const lesson = getLessonById(lessonId);
+  if (!lesson) {
+    return (
+      <div>
+        <Breadcrumbs items={[{ label: 'المنهج', path: '/curriculum' }, { label: 'درس غير موجود' }]} />
+        <div style={{ textAlign: 'center', padding: '3rem' }}>
+          <h2>عذراً، لم يتم العثور على هذا الدرس</h2>
+          <Link to="/curriculum" className="btn-primary" style={{ marginTop: '1rem', display: 'inline-block' }}>
+            العودة للمنهج
+          </Link>
         </div>
+      </div>
+    );
+  }
+
+  const unitData = getUnitById(lesson.unitId);
+  const adjacent = getAdjacentLessons(lesson.id);
+  const completedSections = progress.completedSections[lesson.id] || [];
+  const isLessonCompleted = progress.completedLessons.includes(lesson.id);
+
+  const handleToggleSection = (sectionKey: string) => {
+    const wasCompleted = completedSections.includes(sectionKey);
+    const updated = toggleSectionComplete(lesson.id, sectionKey);
+    setProgress(updated);
+
+    // If section just completed, trigger badges evaluation
+    if (!wasCompleted) {
+      const earned = evaluateBadges(updated);
+      earned.forEach((badgeId) => {
+        if (!updated.badges.includes(badgeId)) {
+          unlockBadge(badgeId);
+          setShowConfetti(true);
+        }
+      });
+    }
+  };
+
+  const handleQuizScore = (score: number) => {
+    const updated = recordQuizScore(lesson.id, score);
+    setProgress(updated);
+    if (score >= 100) {
+      unlockBadge('quiz-champ');
+      setShowConfetti(true);
+    }
+  };
+
+  return (
+    <div>
+      <ConfettiBurst active={showConfetti} onComplete={() => setShowConfetti(false)} />
+
+      <Breadcrumbs
+        items={[
+          { label: 'المنهج', path: '/curriculum' },
+          ...(unitData
+            ? [
+                { label: unitData.levelTitle, path: '/curriculum' },
+                { label: unitData.unit.title, path: `/unit/${unitData.unit.id}` },
+              ]
+            : []),
+          { label: lesson.title },
+        ]}
+      />
+
+      {/* Lesson Header Banner */}
+      <div className="lesson-header">
+        <div
+          className="card"
+          style={{
+            borderRight: '6px solid var(--primary)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '1rem',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <span className="badge" style={{ backgroundColor: '#eff6ff', color: '#2563EB' }}>
+                {unitData?.unit.title || 'الوحدة الدراسية'}
+              </span>
+              {isLessonCompleted && (
+                <span className="badge" style={{ backgroundColor: '#dcfce7', color: '#16a34a' }}>
+                  ✓ تم إكمال الدرس
+                </span>
+              )}
+            </div>
+            <h1 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#0f172a' }}>
+              {lesson.title}
+            </h1>
+            <p style={{ color: '#64748b', fontSize: '0.9rem', marginTop: '0.25rem' }}>
+              أكمل الأقسام التسعة للدرس للوصول إلى الإتقان والحصول على شارة الوحدة.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span style={{ fontSize: '0.9rem', color: '#475569', fontWeight: 600 }}>
+              الأقسام المكتملة: {completedSections.length} من 9
+            </span>
+          </div>
         </div>
-        <button aria-pressed={finished} className={`lesson-completion-card__button${finished ? ' is-completed' : ''}`} onClick={() => toggleLessonFinished(lessonId)} type="button">
-        <Icon name={finished ? 'check-circle' : 'check'}/>
-        <span>{finished ? 'إلغاء الإكمال' : 'تمييز كدرس منجز ✓'}</span>
-        </button>
-        </div></> : loadResult.status === 'invalid' ? <div aria-live="polite" className="large-empty-state lesson-error">
-        <Icon name="file"/>
-        <h2>محتوى الدرس غير صالح حاليًا</h2>
-        <p>راجع بيانات هذا الدرس أو عُد إلى الوحدة لاختيار درس آخر.</p>
-        <Link className="text-link" to={backToUnit}>العودة إلى الوحدة</Link>
-        </div> : loadResult.status === 'error' ? <div aria-live="polite" className="large-empty-state lesson-error">
-        <Icon name="file"/>
-        <h2>تعذر تحميل محتوى الدرس</h2>
-        <p>حدث عطل مؤقت أثناء فتح الملف.</p>
-        <button className="secondary-button" onClick={() => setAttempt((value) => value + 1)} type="button">أعد المحاولة</button>
-        </div> : <div className="large-empty-state">
-        <Icon name="file"/>
-        <h2>تعذر العثور على محتوى هذا الدرس</h2>
-        <Link className="text-link" to={backToUnit}>العودة إلى الوحدة</Link>
-        </div>}
-    <nav aria-label="التنقل بين الدروس" className="lesson-pagination">{previous ? <Link className="pagination-link pagination-link--previous" to={`/lessons/${previous.id}`}>
-        <Icon name="arrow-right"/>
-        <span>
-        <small>الدرس السابق</small>
-        <strong>{previous.title}</strong>
-        </span>
-        </Link> : <span />}{next && <Link className="pagination-link pagination-link--next" to={`/lessons/${next.id}`}>
-        <span>
-        <small>الدرس التالي</small>
-        <strong>{next.title}</strong>
-        </span>
-        <Icon name="arrow-left"/>
-        </Link>}</nav>
-  </div>
-    </section>;
-}
+      </div>
+
+      {/* 9 Sections Accordion */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <LessonAccordion
+          lesson={lesson}
+          completedSectionKeys={completedSections}
+          onToggleSection={handleToggleSection}
+          onQuizScore={handleQuizScore}
+        />
+      </div>
+
+      {/* Navigation between adjacent lessons */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '1rem',
+          paddingTop: '1.5rem',
+          borderTop: '1px solid var(--border-color)',
+        }}
+      >
+        {adjacent.prevLesson ? (
+          <Link to={`/lesson/${adjacent.prevLesson.id}`} className="btn-secondary">
+            ← الدرس السابق: {adjacent.prevLesson.title}
+          </Link>
+        ) : (
+          <div />
+        )}
+
+        {unitData && (
+          <Link to={`/unit/${unitData.unit.id}`} style={{ color: '#64748b', fontWeight: 600, fontSize: '0.95rem' }}>
+            فهرس الوحدة
+          </Link>
+        )}
+
+        {adjacent.nextLesson ? (
+          <Link to={`/lesson/${adjacent.nextLesson.id}`} className="btn-primary">
+            الدرس التالي: {adjacent.nextLesson.title} →
+          </Link>
+        ) : (
+          <div />
+        )}
+      </div>
+    </div>
+  );
+};

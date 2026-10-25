@@ -1,17 +1,36 @@
-import { useState } from 'react';
-import type { ImageAsset } from '../types/content';
-interface BrandImageProps {
-    image: ImageAsset;
-    className?: string;
-    fallbackLabel?: string;
-    eager?: boolean;
+import React, { useState } from 'react';
+
+interface BrandImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  src: string;
+  fallbackSrc?: string;
+  alt: string;
+  className?: string;
 }
-export function BrandImage({ image, className, fallbackLabel, eager }: BrandImageProps) {
-    const [failed, setFailed] = useState(false);
-    if (failed) {
-        return fallbackLabel ? (<span className={`${className ?? ''} image-fallback`} role="img" aria-label={fallbackLabel}>
-        {fallbackLabel.slice(0, 1)}
-      </span>) : null;
+
+export const BrandImage: React.FC<BrandImageProps> = ({
+  src,
+  fallbackSrc = '/assets/brand/logo-placeholder.svg',
+  alt,
+  className = '',
+  ...props
+}) => {
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    if (!hasError && fallbackSrc && currentSrc !== fallbackSrc) {
+      setHasError(true);
+      setCurrentSrc(fallbackSrc);
     }
-    return (<img alt={image.alt} className={className} decoding="async" loading={eager ? 'eager' : 'lazy'} onError={() => setFailed(true)} src={image.src}/>);
-}
+  };
+
+  return (
+    <img
+      src={currentSrc}
+      alt={alt}
+      onError={handleError}
+      className={className}
+      {...props}
+    />
+  );
+};

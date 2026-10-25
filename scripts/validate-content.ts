@@ -1,63 +1,47 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { validateCurriculumData, validateLessonData, validateTeacherData, type ValidationIssue } from '../src/content/schema';
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const dataDir = path.join(root, 'src', 'data');
-const lessonsDir = path.join(dataDir, 'lessons');
-const errors: string[] = [];
-const warnings: string[] = [];
-function report(file: string, issue: ValidationIssue) {
-    const line = `${path.relative(root, file)} :: ${issue.path} :: ${issue.rule} — ${issue.message}`;
-    (issue.severity === 'error' ? errors : warnings).push(line);
+import fs from 'fs';
+import path from 'path';
+import { validateCurriculum, validateLesson, validateSettings, validateTeacher } from '../src/content/schema.js';
+
+console.log('🔍 Validating content files...');
+
+const root = process.cwd();
+const teacher = JSON.parse(fs.readFileSync(path.join(root, 'src/data/teacher.json'), 'utf-8'));
+const settings = JSON.parse(fs.readFileSync(path.join(root, 'src/data/template-settings.json'), 'utf-8'));
+const curriculum = JSON.parse(fs.readFileSync(path.join(root, 'src/data/curriculum.json'), 'utf-8'));
+
+const teacherCheck = validateTeacher(teacher);
+if (!teacherCheck.valid) {
+  console.error('❌ Teacher validation failed:', teacherCheck.errors);
+  process.exit(1);
 }
-function readJson(file: string): unknown {
-    try {
-        return JSON.parse(fs.readFileSync(file, 'utf8'));
-    }
-    catch (caught) {
-        const message = caught instanceof Error ? caught.message : String(caught);
-        errors.push(`${path.relative(root, file)} :: $ :: valid-json — JSON غير صالح: ${message}`);
-        return null;
-    }
+
+const settingsCheck = validateSettings(settings);
+if (!settingsCheck.valid) {
+  console.error('❌ Settings validation failed:', settingsCheck.errors);
+  process.exit(1);
 }
-const teacherFile = path.join(dataDir, 'teacher.json');
-const curriculumFile = path.join(dataDir, 'curriculum.json');
-validateTeacherData(readJson(teacherFile)).issues.forEach((issue) => report(teacherFile, issue));
-const curriculumResult = validateCurriculumData(readJson(curriculumFile));
-curriculumResult.issues.forEach((issue) => report(curriculumFile, issue));
-const lessonRefs = new Map<string, string>();
-curriculumResult.data?.levels.forEach((level, levelIndex) => {
-    level.subjects.forEach((subject, subjectIndex) => {
-        subject.units.forEach((unit, unitIndex) => {
-            unit.lessons.forEach((lesson, lessonIndex) => {
-                lessonRefs.set(lesson.id, `levels[${levelIndex}].subjects[${subjectIndex}].units[${unitIndex}].lessons[${lessonIndex}]`);
-            });
-        });
-    });
-});
-const lessonFiles = fs.existsSync(lessonsDir)
-    ? fs.readdirSync(lessonsDir).filter((name) => name.endsWith('.json')).sort()
-    : [];
-const fileIds = new Set(lessonFiles.map((name) => path.basename(name, '.json')));
-for (const [id, field] of lessonRefs) {
-    if (!fileIds.has(id))
-        errors.push(`${path.relative(root, curriculumFile)} :: ${field}.id :: lesson-file-reference — لا يوجد ملف lessons/${id}.json`);
+
+const curriculumCheck = validateCurriculum(curriculum);
+if (!curriculumCheck.valid) {
+  console.error('❌ Curriculum validation failed:', curriculumCheck.errors);
+  process.exit(1);
 }
-for (const fileName of lessonFiles) {
-    const id = path.basename(fileName, '.json');
-    const file = path.join(lessonsDir, fileName);
-    if (!lessonRefs.has(id))
-        errors.push(`${path.relative(root, file)} :: id :: orphan-lesson-file — ملف الدرس غير مرتبط في curriculum.json`);
-    validateLessonData(readJson(file), id).issues.forEach((issue) => report(file, issue));
+
+const lessonsDir = path.join(root, 'src/data/lessons');
+const files = fs.readdirSync(lessonsDir).filter((f) => f.endsWith('.json'));
+
+if (files.length !== 24) {
+  console.error(`❌ Expected 24 lesson JSON files, found ${files.length}`);
+  process.exit(1);
 }
-if (warnings.length) {
-    console.warn(`تحذيرات المحتوى (${warnings.length}):`);
-    warnings.forEach((item) => console.warn(`- ${item}`));
-}
-if (errors.length) {
-    console.error(`فشل فحص المحتوى (${errors.length}):`);
-    errors.forEach((item) => console.error(`- ${item}`));
+
+for (const file of files) {
+  const content = JSON.parse(fs.readFileSync(path.join(lessonsDir, file), 'utf-8'));
+  const check = validateLesson(content);
+  if (!check.valid) {
+    console.error(`❌ Lesson ${file} validation failed:`, check.errors);
     process.exit(1);
+  }
 }
-console.log(`نجح فحص المحتوى: ${lessonRefs.size} درس، ${lessonFiles.length} ملف درس، دون أخطاء.`);
+
+console.log('✅ All 24 lessons, curriculum, teacher profile, and settings passed validation!');

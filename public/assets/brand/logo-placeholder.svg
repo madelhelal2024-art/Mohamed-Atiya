@@ -1,1 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160" role="img" aria-label="شعار تعليمي عام"><rect width="160" height="160" rx="38" fill="#F8F6F1"/><path d="M28 44q26-14 52 3 26-17 52-3v70q-26-11-52 3-26-14-52-3z" fill="#F58220"/><path d="M80 47v70" stroke="#fff" stroke-width="5"/><circle cx="113" cy="36" r="17" fill="#3F7F2A"/><path d="m106 36 5 5 9-11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1D4ED8" />
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#logoGrad)" />
+  <path d="M50 140 L100 60 L150 140 L125 140 L100 95 L75 140 Z" fill="#FFFFFF" />
+  <circle cx="100" cy="50" r="14" fill="#F59E0B" />
+</svg>

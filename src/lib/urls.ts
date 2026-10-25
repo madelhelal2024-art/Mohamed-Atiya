@@ -1,54 +1,29 @@
-const localAssetPrefix = '/assets/';
-function hasCredentials(url: URL): boolean {
-    return Boolean(url.username || url.password);
+/**
+ * URL validation and safety helpers
+ */
+
+const ALLOWED_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'tel:']);
+
+export function isSafeUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  const trimmed = url.trim();
+  if (trimmed.startsWith('/') || trimmed.startsWith('#')) {
+    return true;
+  }
+  try {
+    const parsed = new URL(trimmed, 'https://placeholder.internal');
+    return ALLOWED_PROTOCOLS.has(parsed.protocol);
+  } catch {
+    return false;
+  }
 }
-export function isSafeLocalAssetPath(value: string): boolean {
-    if (!value.startsWith(localAssetPrefix) || value.includes('\\'))
-        return false;
-    try {
-        let decoded = value.split(/[?#]/, 1)[0];
-        for (let pass = 0; pass < 3; pass += 1) {
-            const next = decodeURIComponent(decoded);
-            if (next === decoded)
-                break;
-            decoded = next;
-        }
-        return !decoded.split('/').includes('..');
-    }
-    catch {
-        return false;
-    }
+
+export function sanitizeUrl(url: string | null | undefined, fallback = '#'): string {
+  if (!url) return fallback;
+  return isSafeUrl(url) ? url.trim() : fallback;
 }
-export function isSafeContentUrl(value: string): boolean {
-    if (typeof value !== 'string' || value.trim() !== value || !value)
-        return false;
-    if (isSafeLocalAssetPath(value))
-        return true;
-    try {
-        const url = new URL(value);
-        return url.protocol === 'https:' && !hasCredentials(url);
-    }
-    catch {
-        return false;
-    }
-}
-export function isSafeContactUrl(value: string): boolean {
-    if (typeof value !== 'string' || value.trim() !== value || !value)
-        return false;
-    try {
-        const url = new URL(value);
-        return ['https:', 'mailto:', 'tel:'].includes(url.protocol) && !hasCredentials(url);
-    }
-    catch {
-        return false;
-    }
-}
-export function isExternalHttpsUrl(value: string): boolean {
-    try {
-        const url = new URL(value);
-        return url.protocol === 'https:' && !hasCredentials(url) && !isSafeLocalAssetPath(value);
-    }
-    catch {
-        return false;
-    }
+
+export function isExternalUrl(url: string): boolean {
+  if (!url) return false;
+  return /^https?:\/\//i.test(url.trim());
 }

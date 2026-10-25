@@ -1,28 +1,55 @@
-import { Component, type ErrorInfo, type ReactNode } from 'react';
-interface ErrorBoundaryProps {
-    children: ReactNode;
+import React, { Component, ErrorInfo, ReactNode } from 'react';
+
+interface Props {
+  children: ReactNode;
+  fallback?: ReactNode;
 }
-interface ErrorBoundaryState {
-    failed: boolean;
+
+interface State {
+  hasError: boolean;
+  error?: Error;
 }
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-    state: ErrorBoundaryState = { failed: false };
-    static getDerivedStateFromError(): ErrorBoundaryState {
-        return { failed: true };
-    }
-    componentDidCatch(error: Error, info: ErrorInfo) {
-        if (import.meta.env.DEV)
-            console.error('Application render error', error, info.componentStack);
-    }
-    render() {
-        if (!this.state.failed)
-            return this.props.children;
-        return (<main className="error-boundary" dir="rtl">
-        <div className="large-empty-state">
-          <h1>حدث خطأ غير متوقع</h1>
-          <p>تعذر عرض الصفحة الآن. يمكنك العودة إلى البداية والمحاولة مرة أخرى.</p>
-          <a className="primary-button" href="#/">العودة إلى الرئيسية</a>
+
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+  };
+
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      if (this.props.fallback) {
+        return this.props.fallback;
+      }
+      return (
+        <div style={{ padding: '3rem 1.5rem', textAlign: 'center', maxWidth: '600px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '1.5rem', color: '#b91c1c', marginBottom: '1rem' }}>
+            حدث خطأ غير متوقع أثناء تحميل الصفحة
+          </h2>
+          <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>
+            يرجى إعادة المحاولة أو العودة إلى الصفحة الرئيسية.
+          </p>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => {
+              this.setState({ hasError: false });
+              window.location.hash = '#/';
+            }}
+          >
+            العودة للرئيسية
+          </button>
         </div>
-      </main>);
+      );
     }
+
+    return this.props.children;
+  }
 }

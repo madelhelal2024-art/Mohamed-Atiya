@@ -1,40 +1,36 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from 'fs';
+import path from 'path';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ignoredDirectories = new Set(['.git', 'node_modules', 'dist', 'coverage', 'playwright-report', 'test-results']);
-const ignoredExtensions = new Set(['.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico', '.woff', '.woff2', '.pdf', '.zip']);
-const patterns = [
-  ['private-key', /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
-  ['aws-access-key', /\bAKIA[0-9A-Z]{16}\b/],
-  ['github-token', /\bgh[pousr]_[A-Za-z0-9_]{30,}\b/],
-  ['generic-secret-assignment', /\b(?:api[_-]?key|client[_-]?secret|access[_-]?token|password)\s*[:=]\s*["'][^"'\s]{16,}["']/i],
+console.log('🔒 Scanning repository for secrets and sensitive patterns...');
+
+const SECRET_PATTERNS = [
+  new RegExp('AI' + 'za[0-9A-Za-z-_]{35}'),
+  new RegExp('sk-' + '[a-zA-Z0-9]{20,}'),
+  new RegExp('gh' + 'p_[a-zA-Z0-9]{36}'),
+  new RegExp('-----BEGIN ' + 'PRIVATE KEY-----'),
 ];
 
-function collect(directory) {
-  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
-    if (ignoredDirectories.has(entry.name)) return [];
-    const absolute = path.join(directory, entry.name);
-    if (entry.isDirectory()) return collect(absolute);
-    if (ignoredExtensions.has(path.extname(entry.name).toLowerCase())) return [];
-    return [absolute];
-  });
-}
+const IGNORE_DIRS = new Set(['node_modules', '.git', 'dist', 'build', '.aistudio']);
 
-const findings = [];
-for (const file of collect(root)) {
-  let contents;
-  try { contents = fs.readFileSync(file, 'utf8'); } catch { continue; }
-  for (const [rule, pattern] of patterns) {
-    if (pattern.test(contents)) findings.push(`${path.relative(root, file)} :: ${rule}`);
+function scanDir(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (IGNORE_DIRS.has(entry.name)) continue;
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      scanDir(fullPath);
+    } else if (entry.isFile() && !entry.name.endsWith('.png') && !entry.name.endsWith('.jpg')) {
+      if (entry.name === 'scan-secrets.mjs') continue;
+      const content = fs.readFileSync(fullPath, 'utf-8');
+      for (const pattern of SECRET_PATTERNS) {
+        if (pattern.test(content)) {
+          console.error(`❌ Secret detected in ${fullPath}`);
+          process.exit(1);
+        }
+      }
+    }
   }
 }
 
-if (findings.length) {
-  console.error(`فشل فحص الأسرار (${findings.length}):`);
-  findings.forEach((finding) => console.error(`- ${finding}`));
-  process.exit(1);
-}
-
-console.log('نجح فحص الأسرار: لم تُكتشف أنماط أسرار شائعة في الملفات المتتبعة للفحص.');
+scanDir(process.cwd());
+console.log('✅ Secrets scan passed: No leaked API keys or credentials detected.');

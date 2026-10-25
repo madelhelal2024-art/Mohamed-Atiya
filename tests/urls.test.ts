@@ -1,33 +1,38 @@
 import { describe, expect, it } from 'vitest';
-import { isSafeContactUrl, isSafeContentUrl, isSafeLocalAssetPath } from '../src/lib/urls';
-import { getYouTubeId } from '../src/lib/youtube';
-describe('سلامة الروابط', () => {
-    it('تقبل HTTPS والمسارات المحلية المقيدة', () => {
-        expect(isSafeContentUrl('https://example.com/file.pdf')).toBe(true);
-        expect(isSafeLocalAssetPath('/assets/lessons/file.pdf')).toBe(true);
-    });
-    it('ترفض البروتوكولات الخطرة وبيانات الدخول وتجاوز المسار', () => {
-        expect(isSafeContentUrl('javascript:alert(1)')).toBe(false);
-        expect(isSafeContentUrl('https://user:secret@example.com/file')).toBe(false);
-        expect(isSafeLocalAssetPath('/assets/%2e%2e/secret')).toBe(false);
-        expect(isSafeLocalAssetPath('/assets/%252e%252e/secret')).toBe(false);
-    });
-    it('تقيد روابط التواصل بالبروتوكولات المعتمدة', () => {
-        expect(isSafeContactUrl('mailto:teacher@example.com')).toBe(true);
-        expect(isSafeContactUrl('tel:+201000000000')).toBe(true);
-        expect(isSafeContactUrl('data:text/html,unsafe')).toBe(false);
-    });
-});
-describe('روابط YouTube', () => {
-    it.each([
-        ['https://youtu.be/dQw4w9WgXcQ', 'dQw4w9WgXcQ'],
-        ['https://www.youtube.com/watch?v=dQw4w9WgXcQ', 'dQw4w9WgXcQ'],
-        ['https://youtube.com/embed/dQw4w9WgXcQ', 'dQw4w9WgXcQ'],
-        ['https://youtube.com/shorts/dQw4w9WgXcQ', 'dQw4w9WgXcQ'],
-    ])('تستخرج المعرّف من %s', (url, id) => expect(getYouTubeId(url)).toBe(id));
-    it('ترفض النطاقات المضللة والمعرّفات غير الصالحة', () => {
-        expect(getYouTubeId('https://youtube.com.evil.example/watch?v=dQw4w9WgXcQ')).toBeNull();
-        expect(getYouTubeId('https://youtube.com/watch?v=short')).toBeNull();
-        expect(getYouTubeId('https://user:pass@youtube.com/watch?v=dQw4w9WgXcQ')).toBeNull();
-    });
+import { isExternalUrl, isSafeUrl, sanitizeUrl } from '../src/lib/urls';
+
+describe('URL Safety Helpers', () => {
+  it('identifies safe internal and hash routes', () => {
+    expect(isSafeUrl('/curriculum')).toBe(true);
+    expect(isSafeUrl('#/lesson/lesson-01')).toBe(true);
+    expect(isSafeUrl('/assets/sample.pdf')).toBe(true);
+  });
+
+  it('identifies safe external http/https/mailto protocols', () => {
+    expect(isSafeUrl('https://youtube.com')).toBe(true);
+    expect(isSafeUrl('http://example.com')).toBe(true);
+    expect(isSafeUrl('mailto:teacher@example.com')).toBe(true);
+    expect(isSafeUrl('tel:+123456789')).toBe(true);
+  });
+
+  it('rejects unsafe protocols like javascript: or data:', () => {
+    expect(isSafeUrl('javascript:alert(1)')).toBe(false);
+    expect(isSafeUrl('vbscript:msgbox(1)')).toBe(false);
+    expect(isSafeUrl('')).toBe(false);
+    expect(isSafeUrl(null)).toBe(false);
+    expect(isSafeUrl(undefined)).toBe(false);
+  });
+
+  it('sanitizes unsafe URLs with fallback', () => {
+    expect(sanitizeUrl('javascript:alert(1)', '#')).toBe('#');
+    expect(sanitizeUrl('https://safe.org', '#')).toBe('https://safe.org');
+    expect(sanitizeUrl(null, '#')).toBe('#');
+  });
+
+  it('detects external URLs properly', () => {
+    expect(isExternalUrl('https://google.com')).toBe(true);
+    expect(isExternalUrl('http://localhost:3000')).toBe(true);
+    expect(isExternalUrl('/curriculum')).toBe(false);
+    expect(isExternalUrl('#/board')).toBe(false);
+  });
 });

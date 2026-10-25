@@ -1,197 +1,340 @@
-import { useMemo, useState, type ReactNode } from 'react';
-import { getLessonAssistantGuide, getLessonHomeworkAssessment } from '../data/lesson-support';
-import { isSafeContentUrl } from '../lib/urls';
-import { uiCopy } from '../lib/ui-copy';
-import type { LessonContent, Resource } from '../types/content';
-import { BookletViewer } from './BookletViewer';
+import React, { useState } from 'react';
+import { LessonData } from '../types/content';
+import { EMPTY_STATE_MESSAGES, SECTION_NAMES, SectionKey } from '../lib/ui-copy';
+import { SectionCheckButton } from './SectionCheckButton';
+import { getYouTubeEmbedUrl } from '../lib/youtube';
 import { GuidedLessonAssistant } from './GuidedLessonAssistant';
-import { Icon, type IconName } from './Icon';
-import { HomeworkList, ResourceList, SummaryResources, VideoResources } from './ResourceList';
-type SectionId = keyof typeof uiCopy.lessonSections;
-interface SectionDefinition {
-    id: SectionId;
-    icon: IconName;
-    count: number;
-    description: string;
-    journey: string;
-    theme: string;
-    content: ReactNode;
+import { BookletViewer } from './BookletViewer';
+import { SafeExternalLink } from './SafeExternalLink';
+
+interface LessonAccordionProps {
+  lesson: LessonData;
+  completedSectionKeys: string[];
+  onToggleSection: (sectionKey: string) => void;
+  onQuizScore?: (scorePercent: number) => void;
 }
-function EmptyState({ message }: {
-    message: string;
-}) {
-    return (<div className="empty-state experience-empty">
-      <span className="empty-state__icon">
-    <Icon name="sparkle"/>
-    </span>
-      <p>{message}</p>
-    </div>);
-}
-function normalizedFormat(resource: Resource): string {
-    return (resource.format ?? '').trim().toLowerCase();
-}
-function isBooklet(resource: Resource): boolean {
-    const format = normalizedFormat(resource);
-    return format.includes('booklet') || format.includes('بوكليت');
-}
-function isPresentation(resource: Resource): boolean {
-    const format = normalizedFormat(resource);
-    return [
-        'presentation',
-        'powerpoint',
-        'ppt',
-        'pptx',
-        'بوربوينت',
-        'بوربينت',
-        'عرض تقديمي',
-    ].some((keyword) => format.includes(keyword));
-}
-export function LessonAccordion({ lesson }: {
-    lesson: LessonContent;
-}) {
-    const sections = useMemo<SectionDefinition[]>(() => {
-        const explanationCount = Number(Boolean(lesson.explanation.text.trim())) + Number(Boolean(lesson.explanation.audio));
-        const summaryCount = Number(Boolean(lesson.summary.text.trim())) + lesson.summary.resources.length;
-        const bookletFiles = lesson.files.filter(isBooklet);
-        const presentationFiles = lesson.files.filter(isPresentation);
-        const assistantGuide = getLessonAssistantGuide(lesson.id);
-        const generatedHomework = getLessonHomeworkAssessment(lesson.id);
-        const homeworkItems = generatedHomework && !lesson.homework.some(({ id }) => id === generatedHomework.id)
-            ? [...lesson.homework, generatedHomework]
-            : lesson.homework;
-        return [
-            {
-                id: 'explanation',
-                description: 'خلاصة مركّزة تساعدك تبدأ بثقة.', journey: 'افهم', theme: 'focus',
-                icon: 'book',
-                count: explanationCount,
-                content: explanationCount ? (<div className="section-stack">
-            {lesson.explanation.text.trim() && <p className="preserve-lines lesson-text">{lesson.explanation.text}</p>}
-            {lesson.explanation.audio && isSafeContentUrl(lesson.explanation.audio.url) && (<div className="audio-card">
-                <strong>{lesson.explanation.audio.title}</strong>
-                <audio controls preload="metadata" src={lesson.explanation.audio.url}>
-                  متصفحك لا يدعم تشغيل الصوت.
-                </audio>
-                {lesson.explanation.audio.transcript && (<div className="media-transcript">
-                    <h3>النص المكتوب للصوت</h3>
-                    <p className="preserve-lines">{lesson.explanation.audio.transcript}</p>
-                  </div>)}
-              </div>)}
-          </div>) : <EmptyState message={uiCopy.empty.explanation}/>,
-            },
-            {
-                id: 'summary',
-                description: 'حوّل الأفكار إلى صورة مترابطة.', journey: 'لخّص', theme: 'summary',
-                icon: 'map',
-                count: summaryCount,
-                content: summaryCount ? (<div className="section-stack">
-            {lesson.summary.text.trim() && <p className="preserve-lines lesson-text">{lesson.summary.text}</p>}
-            <SummaryResources resources={lesson.summary.resources}/>
-          </div>) : <EmptyState message={uiCopy.empty.summary}/>,
-            },
-            {
-                id: 'videos',
-                description: 'شاهد الشرح في دقائق واضحة.', journey: 'شاهد', theme: 'video',
-                icon: 'video',
-                count: lesson.videos.length,
-                content: lesson.videos.length ? <VideoResources resources={lesson.videos}/> : <EmptyState message={uiCopy.empty.videos}/>,
-            },
-            {
-                id: 'activities',
-                description: 'تعلّم بالمحاولة واللعب والتجربة.', journey: 'طبّق', theme: 'activity',
-                icon: 'game',
-                count: lesson.activities.length,
-                content: lesson.activities.length ? <ResourceList action="افتح النشاط" resources={lesson.activities}/> : <EmptyState message={uiCopy.empty.activities}/>,
-            },
-            {
-                id: 'assessments',
-                description: 'اختبر فهمك خطوة بخطوة.', journey: 'اختبر', theme: 'quiz',
-                icon: 'brain',
-                count: lesson.assessments.length,
-                content: lesson.assessments.length ? <ResourceList action="ابدأ التقويم" resources={lesson.assessments}/> : <EmptyState message={uiCopy.empty.assessments}/>,
-            },
-            {
-                id: 'booklet',
-                description: 'ملفّك للقراءة والمراجعة الهادئة.', journey: 'اقرأ', theme: 'booklet',
-                icon: 'book',
-                count: bookletFiles.length,
-                content: bookletFiles.length ? <BookletViewer resources={bookletFiles}/> : <EmptyState message={uiCopy.empty.booklet}/>,
-            },
-            {
-                id: 'presentation',
-                description: 'عرض جاهز للاستكشاف والمشاركة.', journey: 'اعرض', theme: 'presentation',
-                icon: 'file',
-                count: presentationFiles.length,
-                content: presentationFiles.length ? <ResourceList action="افتح العرض التقديمي" resources={presentationFiles}/> : <EmptyState message={uiCopy.empty.presentation}/>,
-            },
-            {
-                id: 'assistant',
-                description: 'مساعدة موجّهة من داخل الدرس.', journey: 'اسأل', theme: 'assistant',
-                icon: 'message',
-                count: assistantGuide ? 4 : 0,
-                content: assistantGuide ? <GuidedLessonAssistant guide={assistantGuide}/> : <EmptyState message={uiCopy.empty.assistant}/>,
-            },
-            {
-                id: 'homework',
-                description: 'مهمة قصيرة تثبت ما تعلّمته.', journey: 'راجع', theme: 'homework',
-                icon: 'clipboard',
-                count: homeworkItems.length,
-                content: homeworkItems.length ? <HomeworkList items={homeworkItems}/> : <EmptyState message={uiCopy.empty.homework}/>,
-            },
-        ];
-    }, [lesson]);
-    const firstWithContent = sections.find(({ count }) => count > 0)?.id ?? 'explanation';
-    const [openSection, setOpenSection] = useState<SectionId | null>(firstWithContent);
-    function openSectionAndFocus(id: SectionId, toggle = false) {
-        const next = toggle && openSection === id ? null : id;
-        setOpenSection(next);
-        if (next)
-            window.requestAnimationFrame(() => {
-                document.getElementById(`section-panel-${next}`)?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-            });
+
+export const LessonAccordion: React.FC<LessonAccordionProps> = ({
+  lesson,
+  completedSectionKeys = [],
+  onToggleSection,
+  onQuizScore,
+}) => {
+  const [openSection, setOpenSection] = useState<string>('keyPoints');
+  const [quizAnswers, setQuizAnswers] = useState<Record<string, number>>({});
+  const [quizSubmitted, setQuizSubmitted] = useState<boolean>(false);
+
+  const completedSet = new Set(completedSectionKeys);
+
+  const toggleAccordion = (key: string) => {
+    setOpenSection((prev) => (prev === key ? '' : key));
+  };
+
+  const handleSelectQuizOption = (questionId: string, optionIndex: number) => {
+    if (quizSubmitted) return;
+    setQuizAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
+  };
+
+  const handleSubmitQuiz = () => {
+    if (quizSubmitted || !lesson.quiz || lesson.quiz.length === 0) return;
+    let correctCount = 0;
+    lesson.quiz.forEach((q) => {
+      if (quizAnswers[q.id] === q.correctAnswer) {
+        correctCount++;
+      }
+    });
+    const scorePercent = Math.round((correctCount / lesson.quiz.length) * 100);
+    setQuizSubmitted(true);
+    onQuizScore?.(scorePercent);
+    if (!completedSet.has('quiz')) {
+      onToggleSection('quiz');
     }
-    return (<div className="lesson-experience">
-      <nav aria-label="محطات الدرس" className="lesson-journey">
-        <div className="lesson-journey__intro">
-    <span className="lesson-journey__eyebrow">رحلة التعلّم</span>
-    <strong>اختر المحطة التي تناسبك الآن</strong>
+  };
+
+  const renderSectionContent = (key: SectionKey) => {
+    switch (key) {
+      case 'keyPoints':
+        if (!lesson.keyPoints || lesson.keyPoints.length === 0) {
+          return <p style={{ color: '#64748b' }}>{EMPTY_STATE_MESSAGES.keyPoints}</p>;
+        }
+        return (
+          <ul style={{ paddingRight: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+            {lesson.keyPoints.map((pt, i) => (
+              <li key={i} style={{ color: '#334155', fontWeight: 500 }}>{pt}</li>
+            ))}
+          </ul>
+        );
+
+      case 'summary':
+        return (
+          <div>
+            <p style={{ color: '#334155', whiteSpace: 'pre-line', lineHeight: '1.8' }}>
+              {lesson.summary || EMPTY_STATE_MESSAGES.summary}
+            </p>
+          </div>
+        );
+
+      case 'video': {
+        const embedUrl = getYouTubeEmbedUrl(lesson.video?.url);
+        return (
+          <div>
+            {embedUrl ? (
+              <div style={{ position: 'relative', paddingBottom: '56.25%', height: 0, overflow: 'hidden', borderRadius: '12px' }}>
+                <iframe
+                  src={embedUrl}
+                  title={lesson.video.title || 'فيديو الدرس'}
+                  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 0 }}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              <p style={{ color: '#64748b' }}>{EMPTY_STATE_MESSAGES.video}</p>
+            )}
+            <div style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#64748b' }}>
+              {lesson.video?.title} ({lesson.video?.durationMinutes} دقيقة)
+            </div>
+          </div>
+        );
+      }
+
+      case 'activities':
+        if (!lesson.activities || lesson.activities.length === 0) {
+          return <p style={{ color: '#64748b' }}>{EMPTY_STATE_MESSAGES.activities}</p>;
+        }
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {lesson.activities.map((act, i) => (
+              <div key={i} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '1rem' }}>
+                <h5 style={{ fontWeight: 700, color: '#1e293b', marginBottom: '0.25rem' }}>{act.title}</h5>
+                <p style={{ fontSize: '0.95rem', color: '#475569' }}>{act.description}</p>
+                {act.materials && act.materials.length > 0 && (
+                  <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    {act.materials.map((m, mi) => (
+                      <span key={mi} className="badge" style={{ background: '#f1f5f9', color: '#64748b', fontSize: '0.75rem' }}>
+                        {m}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'quiz': {
+        if (!lesson.quiz || lesson.quiz.length === 0) {
+          return <p style={{ color: '#64748b' }}>{EMPTY_STATE_MESSAGES.quiz}</p>;
+        }
+        return (
+          <div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {lesson.quiz.map((q, qIndex) => {
+                const selectedOpt = quizAnswers[q.id];
+                return (
+                  <div key={q.id} style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem' }}>
+                    <p style={{ fontWeight: 700, color: '#0f172a', marginBottom: '0.75rem' }}>
+                      {qIndex + 1}. {q.question}
+                    </p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      {q.options.map((opt, optIndex) => {
+                        const isSelected = selectedOpt === optIndex;
+                        const isCorrect = q.correctAnswer === optIndex;
+                        let optBg = '#f8fafc';
+                        let optColor = '#334155';
+                        let optBorder = '#e2e8f0';
+
+                        if (quizSubmitted) {
+                          if (isCorrect) {
+                            optBg = '#dcfce7';
+                            optColor = '#15803d';
+                            optBorder = '#86efac';
+                          } else if (isSelected && !isCorrect) {
+                            optBg = '#fee2e2';
+                            optColor = '#b91c1c';
+                            optBorder = '#fca5a5';
+                          }
+                        } else if (isSelected) {
+                          optBg = '#eff6ff';
+                          optColor = '#1d4ed8';
+                          optBorder = '#93c5fd';
+                        }
+
+                        return (
+                          <button
+                            key={optIndex}
+                            type="button"
+                            onClick={() => handleSelectQuizOption(q.id, optIndex)}
+                            style={{
+                              textAlign: 'right',
+                              padding: '0.75rem 1rem',
+                              borderRadius: '8px',
+                              background: optBg,
+                              color: optColor,
+                              border: `1px solid ${optBorder}`,
+                              fontWeight: 500,
+                              cursor: quizSubmitted ? 'default' : 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'space-between',
+                            }}
+                          >
+                            <span>{opt}</span>
+                            {quizSubmitted && isCorrect && <span style={{ fontWeight: 'bold' }}>✓</span>}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {quizSubmitted && q.explanation && (
+                      <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: '#f8fafc', borderRadius: '8px', fontSize: '0.85rem', color: '#475569' }}>
+                        💡 <strong>التوضيح:</strong> {q.explanation}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {!quizSubmitted ? (
+              <div style={{ marginTop: '1.25rem' }}>
+                <button
+                  type="button"
+                  className="btn-primary"
+                  onClick={handleSubmitQuiz}
+                  disabled={Object.keys(quizAnswers).length < lesson.quiz.length}
+                  style={{
+                    opacity: Object.keys(quizAnswers).length < lesson.quiz.length ? 0.6 : 1,
+                  }}
+                >
+                  تأكيد الإجابات واعتماد النتيجة
+                </button>
+              </div>
+            ) : (
+              <div style={{ marginTop: '1.25rem', padding: '1rem', background: '#dcfce7', borderRadius: '8px', color: '#15803d', fontWeight: 600 }}>
+                تم اعتماد نتيجة الاختبار وحفظها في ملفك التعليمي!
+              </div>
+            )}
+          </div>
+        );
+      }
+
+      case 'booklet':
+        return (
+          <BookletViewer
+            title={lesson.booklet?.title || 'مذكرة الدرس'}
+            url={lesson.booklet?.url || '#'}
+            totalPages={lesson.booklet?.totalPages}
+            description={lesson.booklet?.description}
+          />
+        );
+
+      case 'presentation':
+        return (
+          <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <h5 style={{ fontWeight: 700, color: '#0f172a', marginBottom: '0.5rem' }}>
+              {lesson.presentation?.title || 'شرائح العرض التقديمي'}
+            </h5>
+            <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '1rem' }}>
+              شرائح تقديمية مخصصة لشرح الدرس بالفصل أو الاستعراض الذاتي.
+            </p>
+            <SafeExternalLink href={lesson.presentation?.url || '#'} className="btn-secondary">
+              استعراض العرض التقديمي 📽️
+            </SafeExternalLink>
+          </div>
+        );
+
+      case 'assistant':
+        return <GuidedLessonAssistant items={lesson.assistant || []} />;
+
+      case 'homework':
+        if (!lesson.homework || !lesson.homework.tasks || lesson.homework.tasks.length === 0) {
+          return <p style={{ color: '#64748b' }}>{EMPTY_STATE_MESSAGES.homework}</p>;
+        }
+        return (
+          <div style={{ background: '#ffffff', padding: '1.5rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+            <h5 style={{ fontWeight: 700, color: '#0f172a', marginBottom: '0.5rem' }}>
+              {lesson.homework.title}
+            </h5>
+            <p style={{ color: '#475569', marginBottom: '1rem' }}>{lesson.homework.description}</p>
+            <ol style={{ paddingRight: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {lesson.homework.tasks.map((task, i) => (
+                <li key={i} style={{ color: '#334155' }}>{task}</li>
+              ))}
+            </ol>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  const sectionKeysList: SectionKey[] = [
+    'keyPoints',
+    'summary',
+    'video',
+    'activities',
+    'quiz',
+    'booklet',
+    'presentation',
+    'assistant',
+    'homework',
+  ];
+
+  return (
+    <div className="lesson-sections-container">
+      {sectionKeysList.map((key, idx) => {
+        const isOpen = openSection === key;
+        const isCompleted = completedSet.has(key);
+        const name = SECTION_NAMES[key];
+
+        return (
+          <div key={key} className={`section-card ${isCompleted ? 'completed' : ''}`}>
+            <div
+              className="section-header-btn"
+              onClick={() => toggleAccordion(key)}
+              style={{ cursor: 'pointer' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <span
+                  style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    background: isCompleted ? '#dcfce7' : '#f1f5f9',
+                    color: isCompleted ? '#16a34a' : '#64748b',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '0.85rem',
+                    fontWeight: 700,
+                  }}
+                >
+                  {idx + 1}
+                </span>
+                <span>{name}</span>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <SectionCheckButton
+                  completed={isCompleted}
+                  onToggle={() => onToggleSection(key)}
+                />
+                <span style={{ color: '#94a3b8', fontSize: '0.85rem' }}>
+                  {isOpen ? '▲' : '▼'}
+                </span>
+              </div>
+            </div>
+
+            {isOpen && (
+              <div className="section-body">
+                {renderSectionContent(key)}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
-        <ol className="lesson-journey__track">{sections.map((section, index) => <li className="lesson-journey__item" key={section.id}>
-          <a aria-controls={`section-panel-${section.id}`} aria-current={openSection === section.id ? 'step' : undefined} className={`journey-stop${openSection === section.id ? ' is-active' : ''}${section.count > 0 ? ' has-content' : ''}`} href={`#section-panel-${section.id}`} onClick={(event) => { event.preventDefault(); openSectionAndFocus(section.id); }}>
-            <span className="journey-stop__node">
-        <span>{String(index + 1).padStart(2, '0')}</span>
-        <Icon name={section.icon}/>
-        </span>
-            <span className="journey-stop__copy">
-        <strong>{section.journey}</strong>
-        <small>{section.count > 0 ? 'متاح الآن' : 'قريبًا'}</small>
-        </span>
-          </a>
-        </li>)}</ol>
-      </nav>
-      <div className="lesson-accordion">{sections.map((section, index) => {
-            const open = openSection === section.id, headingId = `section-heading-${section.id}`, panelId = `section-panel-${section.id}`;
-            return <section className={`accordion-item experience-card experience-card--${section.theme}${open ? ' is-open' : ''}${section.count === 0 ? ' is-empty' : ''}`} key={section.id}>
-          <h2 id={headingId}>
-            <button aria-controls={panelId} aria-expanded={open} className="accordion-trigger experience-card__trigger" onClick={() => openSectionAndFocus(section.id, true)} type="button">
-            <span className="experience-card__index">{String(index + 1).padStart(2, '0')}</span>
-            <span className="accordion-icon experience-card__icon">
-            <Icon name={section.icon}/>
-            </span>
-            <span className="accordion-title experience-card__heading">
-            <span className="experience-card__eyebrow">{section.journey}</span>
-            <span className="experience-card__title">{uiCopy.lessonSections[section.id]}</span>
-            <span className="experience-card__description">{section.description}</span>
-            </span>
-            <span className="accordion-meta experience-card__meta">
-            <span className="experience-card__availability">{section.count > 0 ? `${section.count} ${section.count === 1 ? 'مورد' : 'موارد'}` : 'لا يوجد محتوى بعد'}</span>
-            <span className="experience-card__cta">{open ? 'إخفاء القسم' : 'افتح القسم'} <Icon className="accordion-chevron" name="chevron"/>
-            </span>
-            </span>
-          </button>
-            </h2>
-          {open && <div aria-labelledby={headingId} className="accordion-panel experience-card__panel" id={panelId} role="region">{section.content}</div>}
-        </section>;
-        })}</div>
-    </div>);
-}
+  );
+};

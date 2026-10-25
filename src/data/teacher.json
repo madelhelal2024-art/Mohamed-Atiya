@@ -1,44 +1,16 @@
 {
-  "schemaVersion": 1,
-  "appName": "تطبيقي التعليمي",
-  "name": "اسم المعلم",
-  "professionalTitle": "المسمى المهني",
-  "bio": "مساحة تعليمية تجمع الشرح والأنشطة والموارد في مكان واحد.",
-  "tagline": "تعلّم، طبّق، وتابع إنجازك",
-  "language": "ar",
-  "direction": "rtl",
-  "photo": {
-    "src": "/assets/brand/teacher-placeholder.svg",
-    "alt": "مكان صورة المعلم"
+  "name": "الأستاذ محمد عطية",
+  "title": "معلم ومربي تعليمي",
+  "bio": "مساحة تعليمية تفاعلية منظمة لشرح وتبسيط المناهج الدراسية بأساليب حديثة، مساعدة الطلاب في المتابعة، والتقويم الذاتي المستمر.",
+  "avatar": "/assets/brand/teacher-placeholder.svg",
+  "logo": "/assets/brand/logo-placeholder.svg",
+  "contact": {
+    "email": "m.adelhelal2024@gmail.com",
+    "phone": "",
+    "whatsapp": "",
+    "telegram": "",
+    "youtube": "https://www.youtube.com"
   },
-  "logo": {
-    "src": "/assets/brand/logo-placeholder.svg",
-    "alt": "شعار تعليمي عام"
-  },
-  "theme": {
-    "primary": "#F58220",
-    "primaryContrast": "#18120D",
-    "accent": "#3F7F2A",
-    "background": "#F8F6F1",
-    "surface": "#FFFFFF",
-    "text": "#111111",
-    "mutedText": "#5F625E",
-    "border": "#DED9CF",
-    "focus": "#0B2D5C",
-    "secondary": "#0B2D5C",
-    "creativeAccent": "#3B1D5A",
-    "warmSurface": "#F7E8C8",
-    "fontFamily": "'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, Arial, sans-serif"
-  },
-  "contacts": [],
-  "designPreferences": {
-    "style": "تعليمي، بسيط، واضح، منظم، بخلفيات فاتحة",
-    "avoid": [
-      "الزحام البصري",
-      "كثرة الألوان في الشاشة الواحدة",
-      "الزخارف غير الوظيفية"
-    ]
-  },
-  "brandName": "",
-  "specialization": ""
+  "accentColor": "#2563EB",
+  "secondaryColor": "#F59E0B"
 }

@@ -1,386 +1,124 @@
 {
-  "unit-01": {
-    "id": "unit-01",
-    "unitId": "unit-01",
-    "levelId": "level-01",
-    "subjectId": "subject-01",
-    "stageBadge": "المستوى 1 · المجال التعليمي 1",
-    "number": "الوحدة 1",
-    "title": "الوحدة 1 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #064e3b, #059669)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-01-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-01",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-02",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-01-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-03",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-02": {
-    "id": "unit-02",
-    "unitId": "unit-02",
-    "levelId": "level-01",
-    "subjectId": "subject-01",
-    "stageBadge": "المستوى 1 · المجال التعليمي 1",
-    "number": "الوحدة 2",
-    "title": "الوحدة 2 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #064e3b, #059669)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-02-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-04",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-05",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-02-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-06",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-03": {
-    "id": "unit-03",
-    "unitId": "unit-03",
-    "levelId": "level-02",
-    "subjectId": "subject-02",
-    "stageBadge": "المستوى 2 · المجال التعليمي 2",
-    "number": "الوحدة 1",
-    "title": "الوحدة 1 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #1e1b4b, #4f46e5)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-03-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-07",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-08",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-03-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-09",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-04": {
-    "id": "unit-04",
-    "unitId": "unit-04",
-    "levelId": "level-02",
-    "subjectId": "subject-02",
-    "stageBadge": "المستوى 2 · المجال التعليمي 2",
-    "number": "الوحدة 2",
-    "title": "الوحدة 2 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #1e1b4b, #4f46e5)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-04-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-10",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-11",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-04-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-12",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-05": {
-    "id": "unit-05",
-    "unitId": "unit-05",
-    "levelId": "level-03",
-    "subjectId": "subject-03",
-    "stageBadge": "المستوى 3 · المجال التعليمي 3",
-    "number": "الوحدة 1",
-    "title": "الوحدة 1 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #0B2D5C, #0284c7)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-05-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-13",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-14",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-05-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-15",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-06": {
-    "id": "unit-06",
-    "unitId": "unit-06",
-    "levelId": "level-03",
-    "subjectId": "subject-03",
-    "stageBadge": "المستوى 3 · المجال التعليمي 3",
-    "number": "الوحدة 2",
-    "title": "الوحدة 2 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #0B2D5C, #0284c7)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-06-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-16",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-17",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-06-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-18",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-07": {
-    "id": "unit-07",
-    "unitId": "unit-07",
-    "levelId": "level-04",
-    "subjectId": "subject-04",
-    "stageBadge": "المستوى 4 · المجال التعليمي 4",
-    "number": "الوحدة 1",
-    "title": "الوحدة 1 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #713f12, #b45309)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-07-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-19",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-20",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-07-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-21",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  },
-  "unit-08": {
-    "id": "unit-08",
-    "unitId": "unit-08",
-    "levelId": "level-04",
-    "subjectId": "subject-04",
-    "stageBadge": "المستوى 4 · المجال التعليمي 4",
-    "number": "الوحدة 2",
-    "title": "الوحدة 2 — أضف عنوان الوحدة",
-    "bannerGradient": "linear-gradient(135deg, #713f12, #b45309)",
-    "iconSymbol": "📚",
-    "topics": [
-      {
-        "id": "unit-08-topic-01",
-        "number": "الموضوع 1",
-        "title": "أضف عنوان الموضوع",
-        "items": [
-          {
-            "id": "lesson-22",
-            "title": "الدرس 1 — أضف عنوان الدرس",
-            "type": "explanation",
-            "typeLabel": "شرح",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          },
-          {
-            "id": "lesson-23",
-            "title": "الدرس 2 — أضف عنوان الدرس",
-            "type": "activity",
-            "typeLabel": "تطبيق",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      },
-      {
-        "id": "unit-08-topic-02",
-        "number": "الموضوع 2",
-        "title": "أضف عنوان الموضوع التالي",
-        "items": [
-          {
-            "id": "lesson-24",
-            "title": "الدرس 3 — أضف عنوان الدرس",
-            "type": "review",
-            "typeLabel": "مراجعة",
-            "description": "خانة قابلة للتخصيص؛ لا تحتوي مادة دراسية."
-          }
-        ]
-      }
-    ]
-  }
+  "units": [
+    {
+      "unitId": "unit-01",
+      "title": "الوحدة الأولى: الأساسيات والمفاهيم",
+      "themeColor": "#2563EB",
+      "objectives": [
+        "استيعاب المفاهيم الأساسية للمجال الأول",
+        "القدرة على تطبيق القواعد التأسيسية بدقة",
+        "حل تدريبات المراجعة بنسبة إتقان لا تقل عن 80%"
+      ],
+      "topics": [
+        { "id": "top-01", "title": "مقدمة ومصطلحات أساسية", "lessonId": "lesson-01", "category": "مفاهيم" },
+        { "id": "top-02", "title": "تطبيق القواعد النموذجية", "lessonId": "lesson-02", "category": "تطبيق" },
+        { "id": "top-03", "title": "مراجعة وتثبيت المعارف", "lessonId": "lesson-03", "category": "مراجعة" }
+      ]
+    },
+    {
+      "unitId": "unit-02",
+      "title": "الوحدة الثانية: التحليل والتوسع",
+      "themeColor": "#0D9488",
+      "objectives": [
+        "تنمية مهارة الاستنتاج والربط",
+        "تحليل النماذج الواقعية وتفسير المخرجات",
+        "التعامل مع المسائل المتنوعة بثقة"
+      ],
+      "topics": [
+        { "id": "top-04", "title": "التحليل والاستنتاج", "lessonId": "lesson-04", "category": "تحليل" },
+        { "id": "top-05", "title": "نماذج واقعية وتطبيقات", "lessonId": "lesson-05", "category": "تطبيق" },
+        { "id": "top-06", "title": "ورشة حل المسائل", "lessonId": "lesson-06", "category": "تدريب" }
+      ]
+    },
+    {
+      "unitId": "unit-03",
+      "title": "الوحدة الثالثة: بناء المهارات التخصصية",
+      "themeColor": "#7C3AED",
+      "objectives": [
+        "إتقان القواعد التخصصية المتقدمة",
+        "اكتساب استراتيجيات الحل الذكي",
+        "تحليل الحالات الدراسية المعمقة"
+      ],
+      "topics": [
+        { "id": "top-07", "title": "القواعد المتقدمة", "lessonId": "lesson-07", "category": "تخصص" },
+        { "id": "top-08", "title": "طرق الحل الذكي السريع", "lessonId": "lesson-08", "category": "استراتيجيات" },
+        { "id": "top-09", "title": "دراسة حالات نموذجية", "lessonId": "lesson-09", "category": "تطبيق" }
+      ]
+    },
+    {
+      "unitId": "unit-04",
+      "title": "الوحدة الرابعة: المعالجة والتقييم المستمر",
+      "themeColor": "#EA580C",
+      "objectives": [
+        "تشخيص الأخطاء الشائعة والوقاية منها",
+        "اجتياز التقييم المحاكي التراكمي",
+        "تثبيت حصيلة المستوى الثاني"
+      ],
+      "topics": [
+        { "id": "top-10", "title": "تفادي الأخطاء الشائعة", "lessonId": "lesson-10", "category": "تصويب" },
+        { "id": "top-11", "title": "التقييم المحاكي", "lessonId": "lesson-11", "category": "تقويم" },
+        { "id": "top-12", "title": "مراجعة شاملة للمستوى الثاني", "lessonId": "lesson-12", "category": "مراجعة" }
+      ]
+    },
+    {
+      "unitId": "unit-05",
+      "title": "الوحدة الخامسة: الفكر النقدي وحل المشكلات",
+      "themeColor": "#0284C7",
+      "objectives": [
+        "تفكيك المسائل المركبة منطقيًا",
+        "صياغة حلول إبداعية بديلة",
+        "تقييم دقة النتائج بطرق متعددة"
+      ],
+      "topics": [
+        { "id": "top-13", "title": "مقدمة المسائل المركبة", "lessonId": "lesson-13", "category": "تفكير نقدي" },
+        { "id": "top-14", "title": "التفكيك المنطقي", "lessonId": "lesson-14", "category": "تحليل" },
+        { "id": "top-15", "title": "الحلول المبتكرة", "lessonId": "lesson-15", "category": "إبداع" }
+      ]
+    },
+    {
+      "unitId": "unit-06",
+      "title": "الوحدة السادسة: الإتقان والبحث المعرفي",
+      "themeColor": "#059669",
+      "objectives": [
+        "استخدام أساليب البحث العلمي",
+        "المقارنة بين النظريات والحلول",
+        "إنجاز مشروع الوحدة التطبيقي بنجاح"
+      ],
+      "topics": [
+        { "id": "top-16", "title": "البحث المعرفي والتوثيق", "lessonId": "lesson-16", "category": "بحث" },
+        { "id": "top-17", "title": "مقارنة النظريات وتكاملها", "lessonId": "lesson-17", "category": "تكامل" },
+        { "id": "top-18", "title": "مشروع الوحدة التطبيقي", "lessonId": "lesson-18", "category": "مشروع" }
+      ]
+    },
+    {
+      "unitId": "unit-07",
+      "title": "الوحدة السابعة: بنوك الأسئلة والاختبارات الشاملة",
+      "themeColor": "#4F46E5",
+      "objectives": [
+        "إدارة وقت الامتحان بكفاءة",
+        "حل بنك الأسئلة الشامل بنسبة إتقان عالية",
+        "التعامل مع أسئلة التميز والتفكير العليا"
+      ],
+      "topics": [
+        { "id": "top-19", "title": "إدارة الاختبارات والوقت", "lessonId": "lesson-19", "category": "مهارات" },
+        { "id": "top-20", "title": "بنك الأسئلة المتقدمة", "lessonId": "lesson-20", "category": "تدريب مكثف" },
+        { "id": "top-21", "title": "أسئلة مهارات التفكير العليا", "lessonId": "lesson-21", "category": "تميز" }
+      ]
+    },
+    {
+      "unitId": "unit-08",
+      "title": "الوحدة الثامنة: الختام وحصاد المنهج",
+      "themeColor": "#DB2777",
+      "objectives": [
+        "الإلمام بالخريطة الشاملة للمنهج",
+        "استيعاب الخلاصات والنصائح الذهبية",
+        "اجتياز الاختبار النهائي بنجاح باهر"
+      ],
+      "topics": [
+        { "id": "top-22", "title": "خريطة المنهج التفاعلية", "lessonId": "lesson-22", "category": "خريطة شاملة" },
+        { "id": "top-23", "title": "مراجعة ليلة الامتحان", "lessonId": "lesson-23", "category": "مراجعة ختامية" },
+        { "id": "top-24", "title": "الاختبار النهائي الشامل", "lessonId": "lesson-24", "category": "اختبار نهائي" }
+      ]
+    }
+  ]
 }

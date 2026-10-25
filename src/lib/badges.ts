@@ -1,82 +1,103 @@
-import type { IconName } from '../components/Icon';
-import { storageKey } from './storage';
-export interface BadgeUnit {
-    id: string;
-    title: string;
-    lessonIds: readonly string[];
-}
-export interface LearningBadge {
-    id: string;
-    title: string;
-    requirement: string;
-    message: string;
-    icon: IconName;
-    rule: {
-        kind: 'lessons';
-        target: number;
-    } | {
-        kind: 'unit';
-    };
-}
-export const LEARNING_BADGES: readonly LearningBadge[] = [
-    { id: 'first-lesson', title: 'بداية موفقة', requirement: 'أكمل أول درس', message: 'أحسنت! أنجزت أول درس وبدأت رحلة التعلم.', icon: 'sparkle', rule: { kind: 'lessons', target: 1 } },
-    { id: 'active-learner', title: 'متعلم نشط', requirement: 'أكمل 3 دروس', message: 'رائع! أنجزت 3 دروس وتواصل تقدمك بثبات.', icon: 'book', rule: { kind: 'lessons', target: 3 } },
-    { id: 'persistent-learner', title: 'المثابر', requirement: 'أكمل 5 دروس', message: 'الاستمرار يصنع الفرق. لقد أنجزت 5 دروس.', icon: 'flag', rule: { kind: 'lessons', target: 5 } },
-    { id: 'steady-progress', title: 'متقدم بثبات', requirement: 'أكمل 10 دروس', message: 'تقدم مميز! وصلت إلى 10 دروس مكتملة.', icon: 'trending-up', rule: { kind: 'lessons', target: 10 } },
-    { id: 'unit-champion', title: 'بطل الوحدة', requirement: 'أكمل جميع دروس وحدة واحدة', message: 'ممتاز! أنجزت الوحدة كاملة.', icon: 'star', rule: { kind: 'unit' } },
-    { id: 'achievement-maker', title: 'صانع الإنجاز', requirement: 'أكمل 20 درسًا', message: 'إنجاز كبير! وصلت إلى 20 درسًا مكتملًا.', icon: 'compass', rule: { kind: 'lessons', target: 20 } },
+import { Badge, UserProgress } from '../types/content';
+
+export const BADGES_LIST: Badge[] = [
+  {
+    id: 'first-step',
+    title: 'الخطوة الأولى',
+    description: 'أكملت أول قسم تعليمي بنجاح',
+    icon: '🚀',
+    category: 'progress',
+    threshold: 1,
+  },
+  {
+    id: 'lesson-pioneer',
+    title: 'رائد الدروس',
+    description: 'أكملت درسًا تعليميًا كاملًا',
+    icon: '⭐',
+    category: 'progress',
+    threshold: 1,
+  },
+  {
+    id: 'knowledge-seeker',
+    title: 'باحث المعرفة',
+    description: 'أكملت 5 أقسام تعليمية مختلفة',
+    icon: '📖',
+    category: 'progress',
+    threshold: 5,
+  },
+  {
+    id: 'quiz-champ',
+    title: 'بطل التقويم',
+    description: 'حققت نسبة 100% في أحد الاختبارات القصيرة',
+    icon: '🏆',
+    category: 'quiz',
+    threshold: 100,
+  },
+  {
+    id: 'unit-master',
+    title: 'قاهر الوحدة',
+    description: 'أكملت 3 دروس في وحدة واحدة',
+    icon: '👑',
+    category: 'mastery',
+    threshold: 3,
+  },
+  {
+    id: 'board-artist',
+    title: 'مبدع السبورة',
+    description: 'استخدمت السبورة التفاعلية وسجلت ملاحظاتك',
+    icon: '🎨',
+    category: 'board',
+    threshold: 1,
+  },
+  {
+    id: 'curriculum-hero',
+    title: 'بطل المنهج',
+    description: 'أنجزت 12 درسًا أو أكثر عبر المنهج',
+    icon: '🌟',
+    category: 'mastery',
+    threshold: 12,
+  },
 ];
-export interface BadgeProgress {
-    badge: LearningBadge;
-    earned: boolean;
-    achievable: boolean;
-    current: number;
-    target: number;
-    unitTitle?: string;
+
+export function getBadgeById(id: string): Badge | undefined {
+  return BADGES_LIST.find((b) => b.id === id);
 }
-export function isUnitComplete(lessonIds: readonly string[], completedIds: ReadonlySet<string>): boolean {
-    return lessonIds.length > 0 && lessonIds.every((id) => completedIds.has(id));
-}
-/** Self-reported completion only; no synthetic cohorts or fabricated scores. */
-export function getBadgeSummary(completedIds: readonly string[], units: readonly BadgeUnit[]) {
-    const validIds = new Set(units.flatMap((unit) => [...unit.lessonIds]));
-    const completed = new Set(completedIds.filter((id) => validIds.has(id)));
-    const unitProgress = units.map((unit) => {
-        const ids = [...new Set(unit.lessonIds)];
-        return { title: unit.title, current: ids.filter((id) => completed.has(id)).length, target: ids.length };
-    }).filter((unit) => unit.target > 0);
-    const nearestUnit = unitProgress.reduce<(typeof unitProgress)[number] | undefined>((best, unit) => !best || unit.current / unit.target > best.current / best.target ? unit : best, undefined);
-    const badges: BadgeProgress[] = LEARNING_BADGES.map((badge) => {
-        if (badge.rule.kind === 'lessons')
-            return { badge, earned: completed.size >= badge.rule.target, achievable: validIds.size >= badge.rule.target, current: Math.min(completed.size, badge.rule.target), target: badge.rule.target };
-        return { badge, earned: Boolean(nearestUnit && nearestUnit.current === nearestUnit.target), achievable: Boolean(nearestUnit), current: nearestUnit?.current ?? 0, target: nearestUnit?.target ?? 1, unitTitle: nearestUnit?.title };
-    });
-    return { completedCount: completed.size, badges };
-}
-export const SEEN_BADGES_KEY = storageKey('seen-badges-v1');
-type NoticeStorage = Pick<Storage, 'getItem' | 'setItem'>;
-export function createBadgeNoticeStore(getStorage: () => NoticeStorage | null = () => typeof window === 'undefined' ? null : window.localStorage) {
-    const memory = new Set<string>();
-    const allowed = new Set(LEARNING_BADGES.map((badge) => badge.id));
-    function read(): Set<string> {
-        try {
-            const raw = getStorage()?.getItem(SEEN_BADGES_KEY);
-            const parsed: unknown = raw ? JSON.parse(raw) : [];
-            if (Array.isArray(parsed))
-                parsed.forEach((id: unknown) => { if (typeof id === 'string' && allowed.has(id))
-                    memory.add(id); });
-        }
-        catch { /* Invalid storage must not interrupt learning. */ }
-        return new Set(memory);
-    }
-    function remember(ids: readonly string[]): void {
-        read();
-        ids.forEach((id) => { if (allowed.has(id))
-            memory.add(id); });
-        try {
-            getStorage()?.setItem(SEEN_BADGES_KEY, JSON.stringify([...memory]));
-        }
-        catch { /* keep session history */ }
-    }
-    return { read, remember };
+
+export function evaluateBadges(progress: UserProgress): string[] {
+  const earned = new Set<string>(progress.badges || []);
+
+  // 1. Calculate total completed sections
+  const totalSections = Object.values(progress.completedSections || {}).reduce(
+    (acc, secs) => acc + (Array.isArray(secs) ? secs.length : 0),
+    0
+  );
+
+  if (totalSections >= 1) {
+    earned.add('first-step');
+  }
+  if (totalSections >= 5) {
+    earned.add('knowledge-seeker');
+  }
+
+  // 2. Completed lessons
+  const totalLessons = (progress.completedLessons || []).length;
+  if (totalLessons >= 1) {
+    earned.add('lesson-pioneer');
+  }
+  if (totalLessons >= 3) {
+    earned.add('unit-master');
+  }
+  if (totalLessons >= 12) {
+    earned.add('curriculum-hero');
+  }
+
+  // 3. Quiz perfection
+  const scores = Object.values(progress.quizScores || {});
+  if (scores.some((score) => score >= 100)) {
+    earned.add('quiz-champ');
+  }
+
+  // Filter out any invalid badge ids that don't exist in BADGES_LIST
+  const validIds = new Set(BADGES_LIST.map((b) => b.id));
+  return Array.from(earned).filter((id) => validIds.has(id));
 }

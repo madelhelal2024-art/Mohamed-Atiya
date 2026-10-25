@@ -1,16 +1,18 @@
 {
-  "levelCovers": {
+  "covers": {
     "level-01": "/assets/covers/level-01.svg",
     "level-02": "/assets/covers/level-02.svg",
     "level-03": "/assets/covers/level-03.svg",
     "level-04": "/assets/covers/level-04.svg"
   },
-  "suggestedKeywords": [
-    "المستوى 1",
-    "المستوى 2",
-    "الوحدة 1",
-    "الوحدة 2",
-    "الدرس 1",
-    "الدرس 3"
+  "searchSuggestions": [
+    "مفاهيم أولية",
+    "القواعد الأساسية",
+    "ورشة عمل",
+    "استراتيجيات الحل",
+    "الأخطاء الشائعة",
+    "الفكر النقدي",
+    "بنك الأسئلة",
+    "الاختبار النهائي"
   ]
 }

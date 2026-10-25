@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="700" height="780" viewBox="0 0 700 780" role="img" aria-label="مكان صورة المعلم"><rect width="700" height="780" rx="40" fill="#F7E8C8"/><circle cx="578" cy="124" r="184" fill="#F58220" opacity=".12"/><circle cx="105" cy="710" r="225" fill="#3F7F2A" opacity=".09"/><circle cx="350" cy="280" r="108" fill="#D9CBAF"/><path d="M132 683c0-176 93-263 218-263s218 87 218 263" fill="#D9CBAF"/><circle cx="543" cy="578" r="68" fill="#fff"/><path d="M506 555h74v49h-74zM518 555l8-13h34l8 13" fill="none" stroke="#3F7F2A" stroke-width="7" stroke-linejoin="round"/><circle cx="543" cy="579" r="13" fill="none" stroke="#3F7F2A" stroke-width="6"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240">
+  <defs>
+    <linearGradient id="teacherBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EEF2FF" />
+      <stop offset="100%" stop-color="#E0E7FF" />
+    </linearGradient>
+  </defs>
+  <circle cx="120" cy="120" r="110" fill="url(#teacherBg)" stroke="#2563EB" stroke-width="4" />
+  <circle cx="120" cy="85" r="42" fill="#3B82F6" />
+  <path d="M55 195 C55 145 90 135 120 135 C150 135 185 145 185 195 Z" fill="#1D4ED8" />
+  <path d="M100 135 L120 155 L140 135 Z" fill="#F59E0B" />
+</svg>

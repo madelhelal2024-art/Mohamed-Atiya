@@ -1,5 +1,6 @@
 {
-  "storageNamespace": "educational-template-v3",
-  "demoMode": true,
-  "version": "3.0.0"
+  "storageNamespace": "educational_app_mohamed_atiya_v3",
+  "demoMode": false,
+  "enableSound": true,
+  "allowReset": true
 }

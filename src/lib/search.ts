@@ -1,36 +1,75 @@
-import type { CurriculumLevel, CurriculumSubject, CurriculumUnit } from '../types/content';
-/** Arabic-aware search; stored labels are never modified. */
-export function normalizeArabic(text: string): string {
-    return (text ?? '').toLowerCase().replace(/[\u064B-\u065F\u0670]/g, '').replace(/\u0640/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/\s+/g, ' ').trim();
+import { Curriculum, LessonRef, Unit } from '../types/content';
+
+export interface SearchResultItem {
+  id: string;
+  title: string;
+  type: 'lesson' | 'unit' | 'level';
+  unitId?: string;
+  levelTitle?: string;
+  url: string;
 }
-export function unitMatchesQuery(unit: CurriculumUnit, query: string, contextKeywords: string[] = []): boolean {
-    const tokens = normalizeArabic(query).split(/\s+/).filter(Boolean);
-    const fields = [unit.title, unit.description ?? '', ...unit.lessons.map((lesson) => lesson.title), ...contextKeywords].map(normalizeArabic);
-    // Keep multiword matches within one field; do not combine a level name with a number from an unrelated lesson.
-    return fields.some((field) => tokens.every((token) => field.includes(token)));
+
+export function normalizeArabicText(text: string): string {
+  if (!text) return '';
+  return text
+    .trim()
+    .toLowerCase()
+    .replace(/[أإآ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي')
+    .replace(/[\u064B-\u065F]/g, ''); // Remove Arabic tashkeel/diacritics
 }
-export interface CurriculumSearchResult {
-    filteredLevels: CurriculumLevel[];
-    matchedUnitsCount: number;
-    totalUnitsCount: number;
-    isSearching: boolean;
-}
-export function filterCurriculum(levels: CurriculumLevel[], query: string): CurriculumSearchResult {
-    const trimmed = query.trim(), isSearching = trimmed.length > 0;
-    let totalUnitsCount = 0, matchedUnitsCount = 0;
-    const filteredLevels: CurriculumLevel[] = [];
-    for (const level of levels) {
-        const subjects: CurriculumSubject[] = [];
-        for (const subject of level.subjects) {
-            totalUnitsCount += subject.units.length;
-            const units = isSearching ? subject.units.filter((unit) => unitMatchesQuery(unit, trimmed, [level.title, level.stage ?? '', subject.title])) : subject.units;
-            if (!isSearching || units.length) {
-                matchedUnitsCount += units.length;
-                subjects.push({ ...subject, units });
-            }
-        }
-        if (subjects.length || !isSearching)
-            filteredLevels.push({ ...level, subjects });
+
+export function searchCurriculum(
+  curriculum: Curriculum,
+  rawQuery: string
+): SearchResultItem[] {
+  const query = normalizeArabicText(rawQuery);
+  if (!query) return [];
+
+  const results: SearchResultItem[] = [];
+
+  for (const level of curriculum.levels) {
+    const levelNormalized = normalizeArabicText(level.title);
+    if (levelNormalized.includes(query)) {
+      results.push({
+        id: level.id,
+        title: level.title,
+        type: 'level',
+        url: `/curriculum`,
+      });
     }
-    return { filteredLevels, matchedUnitsCount, totalUnitsCount, isSearching };
+
+    for (const domain of level.domains) {
+      for (const unit of domain.units) {
+        const unitNormalized = normalizeArabicText(unit.title);
+        if (unitNormalized.includes(query)) {
+          results.push({
+            id: unit.id,
+            title: unit.title,
+            type: 'unit',
+            unitId: unit.id,
+            levelTitle: level.title,
+            url: `/unit/${unit.id}`,
+          });
+        }
+
+        for (const lesson of unit.lessons) {
+          const lessonNormalized = normalizeArabicText(lesson.title);
+          if (lessonNormalized.includes(query)) {
+            results.push({
+              id: lesson.id,
+              title: lesson.title,
+              type: 'lesson',
+              unitId: unit.id,
+              levelTitle: level.title,
+              url: `/lesson/${lesson.id}`,
+            });
+          }
+        }
+      }
+    }
+  }
+
+  return results;
 }

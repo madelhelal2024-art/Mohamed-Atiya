@@ -1,40 +1,67 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
-import lesson01Data from '../src/data/lessons/lesson-01.json';
+import { describe, expect, it, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import React from 'react';
 import { LessonAccordion } from '../src/components/LessonAccordion';
-import type { LessonContent } from '../src/types/content';
-const emptyLesson = lesson01Data as LessonContent;
-describe('سلوك أكورديون الدرس', () => {
-    it('يفتح قسم أهم النقاط افتراضيًا عند خلو الأقسام ويعرض الأقسام التسعة', () => {
-        render(<LessonAccordion lesson={emptyLesson}/>);
-        const explanation = screen.getByRole('button', { name: /أهم النقاط الرئيسة بالدرس/ });
-        const assistant = screen.getByRole('button', { name: /اسألني وأنا هشرح لك/ });
-        expect(explanation.getAttribute('aria-expanded')).toBe('true');
-        expect(screen.getAllByRole('button')).toHaveLength(9);
-        fireEvent.click(assistant);
-        expect(explanation.getAttribute('aria-expanded')).toBe('false');
-        expect(assistant.getAttribute('aria-expanded')).toBe('true');
-        expect(screen.getByText('لم يُضف مساعد شرح موجّه لهذا الدرس بعد.')).toBeTruthy();
-    });
-    it('يفتح أول قسم به محتوى تلقائيًا', () => {
-        const lessonWithActivity = {
-            ...emptyLesson,
-            activities: [
-                {
-                    id: 'test-activity',
-                    title: 'نشاط تجريبي',
-                    url: 'https://example.com/activity',
-                    format: 'نشاط',
-                },
-            ],
-        } as LessonContent;
-        render(<LessonAccordion lesson={lessonWithActivity}/>);
-        const activities = screen.getByRole('button', { name: /الأنشطة والألعاب التعليمية/ });
-        expect(activities.getAttribute('aria-expanded')).toBe('true');
-    });
-    it('يعرض الحالة الفارغة للواجبات في القالب النظيف', () => {
-        render(<LessonAccordion lesson={emptyLesson}/>);
-        fireEvent.click(screen.getByRole('button', { name: /الواجبات \/ الاختبارات/ }));
-        expect(screen.getByText('لم تُضف واجبات أو اختبارات لهذا الدرس بعد.')).toBeTruthy();
-    });
+import { LessonData } from '../src/types/content';
+
+const mockLesson: LessonData = {
+  id: 'lesson-01',
+  title: 'الدرس التجريبي',
+  unitId: 'unit-01',
+  order: 1,
+  keyPoints: ['نقطة أولى', 'نقطة ثانية'],
+  summary: 'ملخص الدرس التجريبي',
+  video: { title: 'فيديو الشرح', url: 'https://youtube.com/watch?v=dQw4w9WgXcQ', durationMinutes: 20 },
+  activities: [{ title: 'نشاط 1', description: 'وصف النشاط' }],
+  quiz: [
+    {
+      id: 'q1',
+      question: 'السؤال الأول؟',
+      options: ['إجابة 1', 'إجابة 2'],
+      correctAnswer: 0,
+      explanation: 'توضيح السؤال',
+    },
+  ],
+  booklet: { title: 'مذكرة الدرس', url: '/sample.pdf', totalPages: 5 },
+  presentation: { title: 'عرض تقديمي', url: 'https://presentation.com' },
+  assistant: [{ prompt: 'سؤال موجّه؟', explanation: 'شرح المساعد' }],
+  homework: { title: 'واجب', description: 'حل التمارين', tasks: ['مهمة 1'] },
+};
+
+describe('LessonAccordion Component', () => {
+  it('renders all 9 section titles properly', () => {
+    render(
+      <LessonAccordion
+        lesson={mockLesson}
+        completedSectionKeys={[]}
+        onToggleSection={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText('أهم النقاط')).toBeDefined();
+    expect(screen.getByText('التلخيص والخرائط')).toBeDefined();
+    expect(screen.getByText('شرح الفيديو')).toBeDefined();
+    expect(screen.getByText('الأنشطة التطبيقية')).toBeDefined();
+    expect(screen.getByText('التقويم الذاتي')).toBeDefined();
+    expect(screen.getByText('البوكليت والمذكرة')).toBeDefined();
+    expect(screen.getByText('العرض التقديمي')).toBeDefined();
+    expect(screen.getByText('اسألني وأنا هشرح لك')).toBeDefined();
+    expect(screen.getByText('الواجبات والاختبارات')).toBeDefined();
+  });
+
+  it('triggers onToggleSection when check button is clicked', () => {
+    const handleToggle = vi.fn();
+    render(
+      <LessonAccordion
+        lesson={mockLesson}
+        completedSectionKeys={[]}
+        onToggleSection={handleToggle}
+      />
+    );
+
+    const checkButtons = screen.getAllByRole('button', { name: /تحديد القسم كمكتمل/i });
+    expect(checkButtons.length).toBeGreaterThan(0);
+    fireEvent.click(checkButtons[0]);
+    expect(handleToggle).toHaveBeenCalled();
+  });
 });

@@ -1,100 +1,46 @@
-import { useEffect, useId, useState } from 'react';
-import { isSafeContentUrl } from '../lib/urls';
-import type { Resource } from '../types/content';
-import { Icon } from './Icon';
+import React from 'react';
 import { SafeExternalLink } from './SafeExternalLink';
-function getGoogleDriveFileId(url: string): string | null {
-    try {
-        const parsed = new URL(url);
-        if (parsed.hostname !== 'drive.google.com')
-            return null;
-        const fileMatch = parsed.pathname.match(/\/file\/d\/([^/]+)/);
-        return fileMatch?.[1] ?? parsed.searchParams.get('id');
-    }
-    catch {
-        return null;
-    }
+
+interface BookletViewerProps {
+  title: string;
+  url: string;
+  totalPages?: number;
+  description?: string;
 }
-function getPreviewUrl(url: string): string {
-    const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/file/d/${fileId}/preview` : url;
-}
-function getDownloadUrl(url: string): string {
-    const fileId = getGoogleDriveFileId(url);
-    return fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : url;
-}
-export function BookletViewer({ resources }: {
-    resources: Resource[];
-}) {
-    const safeResources = resources.filter(({ url }) => isSafeContentUrl(url));
-    const [active, setActive] = useState<Resource | null>(null);
-    const titleId = useId();
-    useEffect(() => {
-        if (!active)
-            return;
-        const previousOverflow = document.body.style.overflow;
-        const closeOnEscape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape')
-                setActive(null);
-        };
-        document.body.style.overflow = 'hidden';
-        window.addEventListener('keydown', closeOnEscape);
-        return () => {
-            document.body.style.overflow = previousOverflow;
-            window.removeEventListener('keydown', closeOnEscape);
-        };
-    }, [active]);
-    return (<>
-      <div className="resource-list booklet-list">
-        {safeResources.map((resource) => (<article className="resource-card booklet-card" key={resource.id}>
-            <div className="resource-card__body">
-              <span className="resource-icon">
-        <Icon name="book"/>
-        </span>
-              <div>
-                <h3>{resource.title}</h3>
-                {resource.description && <p>{resource.description}</p>}
-                <span className="resource-format">{resource.format ?? 'بوكليت PDF'}</span>
-              </div>
-            </div>
-            <div className="booklet-card__actions">
-              <button className="secondary-button booklet-open-button" onClick={() => setActive(resource)} type="button">
-                <Icon name="book"/>
-                عرض البوكليت
-              </button>
-              <SafeExternalLink className="text-link booklet-download-link" href={getDownloadUrl(resource.url)}>
-                <Icon name="download"/>
-                تحميل PDF
-              </SafeExternalLink>
-            </div>
-          </article>))}
+
+export const BookletViewer: React.FC<BookletViewerProps> = ({
+  title,
+  url,
+  totalPages = 1,
+  description,
+}) => {
+  return (
+    <div className="pdf-viewer-card">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h4 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#0f172a' }}>{title}</h4>
+          {description && (
+            <p style={{ fontSize: '0.9rem', color: '#64748b', marginTop: '0.25rem' }}>{description}</p>
+          )}
+          <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>
+            عدد الصفحات المقدر: {totalPages} صفحات
+          </span>
+        </div>
+
+        <SafeExternalLink href={url} className="btn-primary">
+          <span>تحميل / استعراض البوكليت 📄</span>
+        </SafeExternalLink>
       </div>
 
-      {active && (<div className="pdf-drawer-layer">
-          <button aria-label="إغلاق عارض البوكليت" className="pdf-drawer-backdrop" onClick={() => setActive(null)} type="button"/>
-          <aside aria-labelledby={titleId} aria-modal="true" className="pdf-drawer" role="dialog">
-            <header className="pdf-drawer__header">
-              <div>
-                <span className="resource-format">البوكليت</span>
-                <h2 id={titleId}>{active.title}</h2>
-              </div>
-              <button autoFocus className="pdf-drawer__close" onClick={() => setActive(null)} type="button">
-                <span aria-hidden="true">×</span>
-                <span className="sr-only">إغلاق</span>
-              </button>
-            </header>
-            <div className="pdf-drawer__actions">
-              <SafeExternalLink className="primary-button" href={getDownloadUrl(active.url)}>
-                <Icon name="download"/>
-                تحميل البوكليت
-              </SafeExternalLink>
-              <SafeExternalLink className="text-link" href={active.url}>
-                فتح في Google Drive
-                <Icon name="external"/>
-              </SafeExternalLink>
-            </div>
-            <iframe className="pdf-drawer__frame" src={getPreviewUrl(active.url)} title={`عرض ${active.title}`}/>
-          </aside>
-        </div>)}
-    </>);
-}
+      <div className="pdf-preview-box">
+        <div style={{ textAlign: 'center', padding: '1.5rem' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>📑</div>
+          <p style={{ fontWeight: 600, color: '#475569' }}>معاينة المذكرة والبوكليت التعليمي</p>
+          <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.25rem' }}>
+            يمكنك فتح المستند الكامل أو تحميله للطباعة والمذاكرة غير المتصلة.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};

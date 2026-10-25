@@ -1,15 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360" role="img" aria-labelledby="title desc">
-<title id="title">بصمة التعلم</title>
-<desc id="desc">رسم تجريدي لعقل وكتاب ومسارات تعلم متعددة</desc>
-<rect width="520" height="360" rx="32" fill="#F8FAFC"/>
-<circle cx="260" cy="150" r="92" fill="#E0F2FE"/>
-<path d="M218 180c-28-13-43-44-31-73 10-25 34-42 61-42 35 0 64 28 64 63 0 17-7 33-18 45v30h-76z" fill="#1D4ED8" opacity=".92"/>
-<path d="M242 105c12-22 48-20 55 7 12 4 18 18 14 30-3 10-12 17-22 18-5 16-24 24-39 16-14 10-36 0-36-18-13-8-12-29 2-35-2-13 11-25 26-18z" fill="#fff"/>
-<path d="M88 278c55-31 111-31 172 2v42c-61-31-117-31-172 0z" fill="#0F766E"/>
-<path d="M432 278c-55-31-111-31-172 2v42c61-31 117-31 172 0z" fill="#14B8A6"/>
-<path d="M260 280v42" stroke="#0F172A" stroke-width="5" stroke-linecap="round"/>
-<circle cx="105" cy="88" r="18" fill="#F59E0B"/>
-<circle cx="403" cy="95" r="15" fill="#7C3AED"/>
-<circle cx="390" cy="220" r="13" fill="#0F766E"/>
-<path d="M120 98l72 34M388 105l-76 28M380 220l-72-35" stroke="#94A3B8" stroke-width="4" stroke-dasharray="8 8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" width="800" height="400">
+  <defs>
+    <linearGradient id="heroGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" rx="28" fill="url(#heroGrad)" />
+  <circle cx="200" cy="200" r="90" fill="#2563EB" fill-opacity="0.2" />
+  <circle cx="600" cy="200" r="110" fill="#F59E0B" fill-opacity="0.15" />
+  <path d="M160 260 L240 180 L320 220 L440 120 L560 190 L680 100" stroke="#38BDF8" stroke-width="6" fill="none" stroke-linecap="round" />
+  <circle cx="440" cy="120" r="8" fill="#F59E0B" />
+  <circle cx="680" cy="100" r="10" fill="#10B981" />
+  <text x="400" y="320" font-family="sans-serif" font-size="32" font-weight="bold" fill="#FFFFFF" text-anchor="middle" direction="rtl">لوحة التقدم والملف التعليمي</text>
+  <text x="400" y="360" font-family="sans-serif" font-size="18" fill="#94A3B8" text-anchor="middle" direction="rtl">متابعة دقيقة للأداء والتحصيل الدراسي</text>
 </svg>
