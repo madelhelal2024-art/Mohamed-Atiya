@@ -1,0 +1,12 @@
+{
+  "templateVersion": "3.0.0",
+  "sourceBranch": "main",
+  "sourceCommit": "a4fa0558f417219f5d2c20225ed831bce3b02305",
+  "sourceCommitTimestamp": "2026-09-25T16:06:31Z",
+  "preparedDate": "2026-09-25",
+  "kind": "generalized-source-derived-template",
+  "productionBuildVerified": false,
+  "browserRuntimeVerified": false,
+  "containsOriginalPersonalIdentity": false,
+  "containsOriginalCurriculumMaterials": false
+}
