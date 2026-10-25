@@ -1,0 +1,20 @@
+{
+  "grade": "الصف السادس الابتدائي",
+  "subject": "اللغة العربية",
+  "terms": [
+    {
+      "id": "term-one",
+      "title": "الفصل الدراسي الأول",
+      "path": "/grade-six/term-one",
+      "status": "index-ready",
+      "description": "فهرس الوحدات والدروس متاح الآن، ولكل درس مساحة مخصصة لمواده التعليمية."
+    },
+    {
+      "id": "term-two",
+      "title": "الفصل الدراسي الثاني",
+      "path": "/grade-six/term-two",
+      "status": "awaiting-content",
+      "description": "هذا القسم جاهز لإضافة فهرس الفصل الثاني ومواده بعد إرسال الملفات."
+    }
+  ]
+}

@@ -41,8 +41,8 @@ export const EMPTY_STATE_MESSAGES: Record<string, string> = {
 };
 
 export const APP_STRINGS = {
-  appName: 'تطبيق المعلم التعليمي',
-  curriculum: 'المنهج والدروس',
+  appName: 'اللغة العربية — الصف السادس الابتدائي',
+  curriculum: 'الصف السادس الابتدائي',
   board: 'السبورة التفاعلية',
   profile: 'الملف والتقدم',
   programs: 'البرامج والدورات',
@@ -52,7 +52,7 @@ export const APP_STRINGS = {
   markCompleted: 'تحديد كمكتمل',
   markIncomplete: 'إلغاء الإكمال',
   backToUnit: 'العودة للوحدة',
-  backToCurriculum: 'العودة للمنهج',
+  backToCurriculum: 'العودة للصف السادس',
   nextLesson: 'الدرس التالي',
   previousLesson: 'الدرس السابق',
   badgesTitle: 'أوسمة الإنجاز',

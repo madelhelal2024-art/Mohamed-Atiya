@@ -1,10 +1,12 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Navigate, Routes, Route } from 'react-router-dom';
 import { AppShell } from './components/AppShell';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { HomePage } from './pages/HomePage';
-import { CurriculumPage } from './pages/CurriculumPage';
+import { GradeSixOverviewPage } from './pages/GradeSixOverviewPage';
 import { GradeSixTermOnePage } from './pages/GradeSixTermOnePage';
+import { GradeSixTermTwoPage } from './pages/GradeSixTermTwoPage';
+import { GradeSixLessonPage } from './pages/GradeSixLessonPage';
 import { UnitPage } from './pages/UnitPage';
 import { LessonPage } from './pages/LessonPage';
 import { BoardPage } from './pages/BoardPage';
@@ -19,8 +21,11 @@ export const App: React.FC = () => {
         <AppShell>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/curriculum" element={<CurriculumPage />} />
+            <Route path="/curriculum" element={<Navigate to="/grade-six" replace />} />
+            <Route path="/grade-six" element={<GradeSixOverviewPage />} />
             <Route path="/grade-six/term-one" element={<GradeSixTermOnePage />} />
+            <Route path="/grade-six/term-one/:unitId/:entryIndex" element={<GradeSixLessonPage />} />
+            <Route path="/grade-six/term-two" element={<GradeSixTermTwoPage />} />
             <Route path="/unit/:unitId" element={<UnitPage />} />
             <Route path="/lesson/:lessonId" element={<LessonPage />} />
             <Route path="/board" element={<BoardPage />} />

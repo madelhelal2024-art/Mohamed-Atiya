@@ -90,7 +90,9 @@
 .grade-six-index__unit td { line-height: 1.7; }
 .grade-six-index__unit tbody tr:nth-child(even) { background: var(--color-background); }
 .grade-six-index__kind { color: var(--color-secondary); font-size: .85rem; font-weight: 600; }
-.grade-six-index__page { white-space: nowrap; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--color-primary); }
+.grade-six-index__lesson-link { color: var(--color-primary); font-weight: 750; text-decoration: underline; text-decoration-color: #baccec; text-underline-offset: .3em; }
+.grade-six-index__open { display: inline-block; color: var(--color-primary); background: #ebf2fc; border-radius: .65rem; padding: .35rem .75rem; font-weight: 750; white-space: nowrap; }
+.grade-six-index__lesson-link:focus-visible, .grade-six-index__open:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
 .grade-six-index__empty { padding: 1.5rem; text-align: center; border: 1px dashed var(--color-border); border-radius: 1rem; }
 .grade-six-index__back { margin-top: 1.5rem; }
 @media (max-width: 700px) {

@@ -11,19 +11,17 @@ describe('فهرس الصف السادس — الفصل الدراسي الأو�
     expect(index.units.map((unit) => unit.entries.length)).toEqual([18, 18, 19]);
   });
 
-  it('يحفظ الصفحات والعناوين دون روابط أو محتوى دراسي مُختلق', () => {
+  it('يحفظ العناوين دون أرقام صفحات أو روابط أو محتوى دراسي مُختلق', () => {
     for (const unit of index.units) {
       expect(unit.id).toMatch(/^[a-z0-9-]+$/);
-      let previousPage = 0;
-      for (const [kind, title, page] of unit.entries) {
+      for (const entry of unit.entries) {
+        expect(entry).toHaveLength(2);
+        const [kind, title] = entry;
         expect(String(kind).trim().length).toBeGreaterThan(0);
         expect(String(title).trim().length).toBeGreaterThan(0);
-        expect(typeof page).toBe('number');
-        expect(page).toBeGreaterThanOrEqual(previousPage);
-        previousPage = Number(page);
       }
     }
-    expect(index.units[0].entries[0][2]).toBe(7);
-    expect(index.units[2].entries.at(-1)?.[2]).toBe(145);
+    expect(index.units[0].entries[0][1]).toBe('سمر تطور نفسها');
+    expect(index.units[2].entries.at(-1)?.[1]).toBe('نصوص الاستماع والإملاء');
   });
 });
