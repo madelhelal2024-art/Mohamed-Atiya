@@ -5,6 +5,12 @@ import fileManifest from '../data/grade-six-lesson-files.json';
 import contentManifest from '../data/grade-six-lesson-content.json';
 import { GradeSixInlineContent } from '../components/GradeSixInlineContent';
 import { GradeSixResourcePreview } from '../components/GradeSixResourcePreview';
+import { GradeSixTreasureActivities } from '../components/GradeSixTreasureActivities';
+import { GradeSixTreasureQuiz } from '../components/GradeSixTreasureQuiz';
+import { GradeSixTreasurePresentation } from '../components/GradeSixTreasurePresentation';
+import { GradeSixTreasureAssistant } from '../components/GradeSixTreasureAssistant';
+import { GradeSixTreasureHomework } from '../components/GradeSixTreasureHomework';
+import { hasTreasureInteractiveSection, TREASURE_LESSON_KEY } from '../data/grade-six-lesson-interactions';
 import { SECTION_KEYS, SECTION_NAMES } from '../lib/ui-copy';
 import { gradeSixLessonKey, validGradeSixFiles, type GradeSixLessonFiles } from '../lib/grade-six-resources';
 import { hasGradeSixInlineContent, type GradeSixLessonContentManifest } from '../lib/grade-six-content';
@@ -31,7 +37,7 @@ export function GradeSixLessonPage() {
 
   const lessonKey = gradeSixLessonKey(unit.id, entryNumber);
   const readySectionCount = SECTION_KEYS.filter((key) =>
-    hasGradeSixInlineContent(contents[lessonKey]?.[key]) || validGradeSixFiles(files, lessonKey, key).length > 0,
+    hasGradeSixInlineContent(contents[lessonKey]?.[key]) || validGradeSixFiles(files, lessonKey, key).length > 0 || hasTreasureInteractiveSection(lessonKey, key),
   ).length;
 
   return (
@@ -44,7 +50,9 @@ export function GradeSixLessonPage() {
       <header className="grade-six-lesson__hero">
         <span className="grade-six-lesson__type">{entry[0]} · {unit.number} — {unit.title}</span>
         <h1 id="grade-six-lesson-title">{entry[1]}</h1>
-        <p>محتوى الدرس منظّم في تسعة أقسام. تظهر الروابط والملفات بعد إضافتها إلى مكتبة الدروس.</p>
+        <p>{lessonKey === TREASURE_LESSON_KEY
+          ? 'تعلّم الدرس خطوة بخطوة: اقرأ النقاط الأساسية، شاهد الشرح، شارك في الأنشطة، ثم اختبر فهمك وراجع واجباتك.'
+          : 'محتوى الدرس منظّم في تسعة أقسام. تظهر الروابط والملفات بعد إضافتها إلى مكتبة الدروس.'}</p>
         <span className="grade-six-lesson__count">{readySectionCount > 0 ? `${readySectionCount.toLocaleString('ar-EG')} أقسام متاحة من ٩` : 'لم تُضَف ملفات إلى هذا الدرس بعد'}</span>
       </header>
 
@@ -53,7 +61,8 @@ export function GradeSixLessonPage() {
           const resources = validGradeSixFiles(files, lessonKey, section);
           const inlineContent = contents[lessonKey]?.[section];
           const hasContent = hasGradeSixInlineContent(inlineContent);
-          const isReady = resources.length > 0 || hasContent;
+          const hasInteraction = hasTreasureInteractiveSection(lessonKey, section);
+          const isReady = resources.length > 0 || hasContent || hasInteraction;
           return (
             <details className="grade-six-lesson__section" key={section} open={idx === 0}>
               <summary>
@@ -66,6 +75,11 @@ export function GradeSixLessonPage() {
               <div className="grade-six-lesson__section-body">
                 {hasContent && inlineContent && <GradeSixInlineContent content={inlineContent} />}
                 {resources.map((resource) => <GradeSixResourcePreview key={`${section}-${resource.url}`} resource={resource} />)}
+                {hasInteraction && section === 'activities' && <GradeSixTreasureActivities />}
+                {hasInteraction && section === 'quiz' && <GradeSixTreasureQuiz />}
+                {hasInteraction && section === 'presentation' && <GradeSixTreasurePresentation />}
+                {hasInteraction && section === 'assistant' && <GradeSixTreasureAssistant />}
+                {hasInteraction && section === 'homework' && <GradeSixTreasureHomework />}
                 {!isReady && <p>لم تتم إضافة مواد لهذا القسم بعد. سيظهر المحتوى هنا بمجرد رفع الملف وتسجيله.</p>}
               </div>
             </details>
