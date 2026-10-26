@@ -131,6 +131,38 @@
 .grade-six-lesson__files p { color: #526176; font-size: .9rem; }
 .grade-six-lesson__back { margin-top: 1.5rem; }
 .grade-six-lesson__missing { text-align: center; padding: 4rem 1rem; display: grid; justify-items: center; gap: 1.5rem; }
+.grade-six-inline-content { color: #283e5a; }
+.grade-six-inline-content h2 { font-size: clamp(1.2rem, 2.6vw, 1.6rem); color: #183c72; }
+.grade-six-inline-content__subtitle { color: #64748b; margin: .35rem 0 1.4rem; }
+.grade-six-inline-content__blocks { display: grid; gap: .85rem; }
+.grade-six-inline-content__block { border-radius: .9rem; background: #f8fafd; border: 1px solid #e2eaf3; padding: 1rem 1.2rem; }
+.grade-six-inline-content__block h3 { color: #2457a7; font-size: 1.04rem; margin-bottom: .5rem; }
+.grade-six-inline-content__block p { line-height: 1.95; }
+.grade-six-inline-content__block ul, .grade-six-inline-content__block ol, .grade-six-inline-content__exam ol { margin: 0; padding-right: 1.5rem; display: grid; gap: .45rem; }
+.grade-six-inline-content__table-wrap { overflow-x: auto; }
+.grade-six-inline-content table { width: 100%; border-collapse: collapse; text-align: right; }
+.grade-six-inline-content th, .grade-six-inline-content td { border: 1px solid #dbe5ee; padding: .62rem .85rem; }
+.grade-six-inline-content thead { background: #e8f2ff; color: #183c72; }
+.grade-six-inline-content tbody tr:nth-child(odd) { background: #fff; }
+.grade-six-inline-content__exam { margin-top: 1.2rem; border-radius: 1rem; padding: 1.25rem 1.5rem; background: #fff3d5; border: 1px solid #eecf82; }
+.grade-six-inline-content__exam h3 { color: #7b550b; font-size: 1.2rem; margin-bottom: .75rem; }
+.grade-six-resource { margin: .5rem 0 1rem; border: 1px solid #e1e8f1; background: #fafcfe; border-radius: 1rem; padding: 1rem; }
+.grade-six-resource h4 { color: #183c72; margin-bottom: .35rem; }
+.grade-six-resource > p { color: #57677a; line-height: 1.8; margin-bottom: .85rem; }
+.grade-six-resource figure { margin: .75rem 0 0; }
+.grade-six-resource img { display: block; width: 100%; height: auto; border-radius: .75rem; border: 1px solid #e1e8f1; }
+.grade-six-resource figcaption { color: #64748b; font-size: .82rem; margin-top: .45rem; }
+.grade-six-resource video { width: 100%; max-height: 68vh; display: block; background: #10243b; border-radius: .75rem; }
+.grade-six-resource__video-navigation { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .65rem; margin: .65rem 0; color: #536176; }
+.grade-six-resource__video-navigation > div { display: flex; flex-wrap: wrap; gap: .5rem; }
+.grade-six-resource__video-navigation button:disabled { opacity: .43; cursor: not-allowed; }
+.grade-six-resource__download { color: #2457a7; text-decoration: underline; font-weight: 800; }
+.grade-six-resource__pdf-link { margin: .5rem 0 1rem; }
+.grade-six-resource__pdf-preview { margin-top: 1rem; border: 1px solid #e1e8f1; border-radius: .8rem; background: #fff; overflow: hidden; }
+.grade-six-resource__pdf-preview summary { cursor: pointer; font-weight: 800; color: #2457a7; padding: .8rem 1rem; }
+.grade-six-resource__pdf-preview summary:focus-visible { outline: 3px solid #2457a7; outline-offset: -3px; }
+.grade-six-resource__pdf-preview iframe { width: 100%; height: min(78vh, 780px); display: block; border: none; }
+.grade-six-resource a:focus-visible { outline: 3px solid #2457a7; outline-offset: 3px; }
 .grade-six-home__heading { margin: 0 0 .3rem; color: #183c72; font-size: clamp(1.4rem, 3vw, 1.9rem); }
 .grade-six-home__intro { color: #526176; line-height: 1.85; }
 @media (max-width: 690px) {
@@ -141,5 +173,7 @@
   .grade-six-overview__header { padding: 1.35rem; }
   .grade-six-term-card { min-height: 245px; padding: 1.35rem; }
   .grade-six-term-two__empty { padding: 1.3rem; }
+  .grade-six-resource__pdf-preview iframe { height: 68vh; }
+  .grade-six-inline-content__block { padding: .85rem; }
 }
 @media (prefers-reduced-motion: reduce) { .grade-six-term-card { transition: none; } }

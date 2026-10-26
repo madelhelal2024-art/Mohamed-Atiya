@@ -4,6 +4,8 @@ export interface GradeSixFile {
   title: string;
   url: string;
   description?: string;
+  kind?: 'image' | 'video' | 'pdf' | 'file';
+  parts?: string[];
 }
 
 export type GradeSixLessonFiles = Record<string, Partial<Record<SectionKey, GradeSixFile[]>>>;
@@ -33,5 +35,10 @@ export function validGradeSixFiles(
   const entries = manifest[lessonKey]?.[section];
   if (!Array.isArray(entries)) return [];
   return entries.filter((entry) =>
-    Boolean(entry && typeof entry.title === 'string' && entry.title.trim() && typeof entry.url === 'string' && isSafeGradeSixFileUrl(entry.url)));
+    Boolean(
+      entry &&
+      typeof entry.title === 'string' && entry.title.trim() &&
+      typeof entry.url === 'string' && isSafeGradeSixFileUrl(entry.url) &&
+      (!entry.parts || (Array.isArray(entry.parts) && entry.parts.length > 0 && entry.parts.every(isSafeGradeSixFileUrl)))
+    ));
 }

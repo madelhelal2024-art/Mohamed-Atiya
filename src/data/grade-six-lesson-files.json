@@ -1,1 +1,38 @@
-{}
+{
+  "self-development/02": {
+    "summary": [
+      {
+        "title": "دليل الاستفادة من الوقت — خريطة مرئية",
+        "url": "/assets/lessons/grade-six/term-one/self-development/02/summary/time-guide.webp",
+        "kind": "image",
+        "description": "إنفوجرافيك يوضح قيمة الوقت، وترتيب الأولويات، والتوازن، والتأجيل والتشتّت."
+      }
+    ],
+    "video": [
+      {
+        "title": "شرح فيديو: كنز لا يُقدَّر بثمن",
+        "url": "/assets/lessons/grade-six/term-one/self-development/02/video/part-00.mp4",
+        "kind": "video",
+        "description": "الشرح كاملًا (نحو ٧ دقائق و١٩ ثانية) في مشغّل واحد بمقاطع متتابعة للحفاظ على الجودة.",
+        "parts": [
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-00.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-01.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-02.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-03.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-04.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-05.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-06.mp4",
+          "/assets/lessons/grade-six/term-one/self-development/02/video/part-07.mp4"
+        ]
+      }
+    ],
+    "booklet": [
+      {
+        "title": "بوكليت كنز لا يُقدَّر بثمن — المذاكرة والتدريبات",
+        "url": "/assets/lessons/grade-six/term-one/self-development/02/booklet/kanz-workbook.pdf",
+        "kind": "pdf",
+        "description": "بوكليت من ١٩ صفحة يضم الشرح والتدريبات والأسئلة والاختبار والإجابات."
+      }
+    ]
+  }
+}

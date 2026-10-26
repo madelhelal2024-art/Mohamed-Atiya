@@ -37,4 +37,15 @@ describe('واجهة الصف السادس', () => {
     expect(html).toContain('لم تُضَف ملفات إلى هذا الدرس بعد');
     expect(html).not.toContain('href="undefined"');
   });
+
+  it('تعرض أهم النقاط والفيديو والخريطة والبوكليت لدرس كنز لا يقدر بثمن', () => {
+    const html = renderPage('/grade-six/term-one/self-development/2', '/grade-six/term-one/:unitId/:entryIndex', <GradeSixLessonPage />);
+    expect(html).toContain('أهم النقاط الجوهرية');
+    expect(html).toContain('٨٦٤٠٠ ثانية');
+    expect(html).toContain('ركّز عليها قبل الامتحان');
+    expect(html).toContain('time-guide.webp');
+    expect(html).toContain('part-00.mp4');
+    expect(html).toContain('kanz-workbook.pdf');
+    expect(html).toContain('٤ أقسام متاحة من ٩');
+  });
 });
