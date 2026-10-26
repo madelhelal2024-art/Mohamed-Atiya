@@ -31,7 +31,36 @@
         "title": "بوكليت كنز لا يُقدَّر بثمن — المذاكرة والتدريبات",
         "url": "/assets/lessons/grade-six/term-one/self-development/02/booklet/kanz-workbook.pdf",
         "kind": "pdf",
-        "description": "بوكليت من ١٩ صفحة يضم الشرح والتدريبات والأسئلة والاختبار والإجابات."
+        "description": "بوكليت من ١٩ صفحة يضم الشرح والتدريبات والأسئلة والاختبار والإجابات. تصفّح الصفحات مباشرة في الدرس، أو نزّل ملف PDF الأصلي.",
+        "pages": [
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-01.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-02.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-03.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-04.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-05.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-06.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-07.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-08.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-09.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-10.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-11.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-12.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-13.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-14.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-15.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-16.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-17.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-18.png",
+          "/assets/lessons/grade-six/term-one/self-development/02/booklet/pages/page-19.png"
+        ]
+      }
+    ],
+    "presentation": [
+      {
+        "title": "العرض التقديمي الأصلي — كنز لا يُقدَّر بثمن",
+        "url": "/assets/lessons/grade-six/term-one/self-development/02/presentation/kanz-presentation.pptx",
+        "kind": "file",
+        "description": "ملف PowerPoint الأصلي المرفق، ويضم ٢٨ شريحة قابلة للفتح والتعديل. توجد أيضًا شرائح مراجعة تفاعلية داخل هذا القسم."
       }
     ]
   }

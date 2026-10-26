@@ -46,6 +46,9 @@ describe('واجهة الصف السادس', () => {
     expect(html).toContain('time-guide.webp');
     expect(html).toContain('part-00.mp4');
     expect(html).toContain('kanz-workbook.pdf');
+    expect(html).toContain('kanz-presentation.pptx');
+    expect(html).toContain('page-01.png');
+    expect(html).not.toContain('<iframe');
     expect(html).toContain('٩ أقسام متاحة من ٩');
     expect(html).toContain('طبّق ما تعلّمته');
     expect(html).toContain('اختبر فهمك للدرس');

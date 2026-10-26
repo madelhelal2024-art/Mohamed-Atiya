@@ -50,6 +50,52 @@ function SegmentedVideo({ title, parts }: { title: string; parts: string[] }) {
   );
 }
 
+/** Render pages as ordinary images; native PDF iframes are unreliable in some browsers. */
+export function GradeSixBookletPages({ title, pages }: { title: string; pages: string[] }) {
+  const [pageIndex, setPageIndex] = useState(0);
+  const currentPage = pages[pageIndex];
+
+  if (pages.length === 0) return null;
+
+  return (
+    <section className="grade-six-booklet" aria-label={`صفحات ${title}`}>
+      <h5>تصفّح صفحات البوكليت</h5>
+      <p>صفحات كاملة وواضحة داخل الدرس. اضغط على الصفحة لفتحها بحجم أكبر.</p>
+      <div className="grade-six-booklet__navigation">
+        <button className="btn-secondary" type="button" disabled={pageIndex === 0} onClick={() => setPageIndex((value) => value - 1)}>السابق</button>
+        <label htmlFor="grade-six-booklet-page-select">اذهب إلى الصفحة</label>
+        <select
+          id="grade-six-booklet-page-select"
+          value={pageIndex}
+          onChange={(event) => setPageIndex(Number(event.target.value))}
+          aria-label="اختر صفحة من البوكليت"
+        >
+          {pages.map((_, index) => <option key={index} value={index}>صفحة {index + 1} من {pages.length}</option>)}
+        </select>
+        <button className="btn-secondary" type="button" disabled={pageIndex === pages.length - 1} onClick={() => setPageIndex((value) => value + 1)}>التالي</button>
+      </div>
+      <figure className="grade-six-booklet__page">
+        <a href={currentPage} target="_blank" rel="noopener noreferrer" aria-label={`افتح صفحة ${pageIndex + 1} بحجم كامل`}>
+          <img src={currentPage} alt={`صفحة ${pageIndex + 1} من ${pages.length} — ${title}`} loading="lazy" />
+        </a>
+        <figcaption aria-live="polite">الصفحة {pageIndex + 1} من {pages.length}</figcaption>
+      </figure>
+      <div className="grade-six-booklet__page-picker" aria-label="كل صفحات البوكليت">
+        {pages.map((_, index) => (
+          <button
+            key={index}
+            type="button"
+            className={pageIndex === index ? 'is-current' : ''}
+            aria-label={`اعرض صفحة ${index + 1}`}
+            aria-current={pageIndex === index ? 'page' : undefined}
+            onClick={() => setPageIndex(index)}
+          >{index + 1}</button>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 export function GradeSixResourcePreview({ resource }: { resource: GradeSixFile }) {
   const kind = resource.kind || 'file';
   return (
@@ -67,14 +113,15 @@ export function GradeSixResourcePreview({ resource }: { resource: GradeSixFile }
       {kind === 'video' && <SegmentedVideo title={resource.title} parts={resource.parts?.length ? resource.parts : [resource.url]} />}
       {kind === 'pdf' && (
         <>
-          <a className="btn-primary grade-six-resource__pdf-link" href={resource.url} target="_blank" rel="noopener noreferrer">فتح البوكليت أو تنزيله ↗</a>
-          <details className="grade-six-resource__pdf-preview">
-            <summary>معاينة صفحات البوكليت داخل الدرس</summary>
-            <iframe title={`معاينة ${resource.title}`} src={resource.url} loading="lazy" />
-          </details>
+          <a className="btn-primary grade-six-resource__pdf-link" href={resource.url} download>تنزيل البوكليت PDF</a>
+          {resource.pages?.length ? (
+            <GradeSixBookletPages title={resource.title} pages={resource.pages} />
+          ) : (
+            <p>يمكنك تنزيل ملف PDF وفتحه في قارئ الملفات على جهازك.</p>
+          )}
         </>
       )}
-      {kind === 'file' && <a className="grade-six-resource__download" href={resource.url} target="_blank" rel="noopener noreferrer">فتح الملف ↗</a>}
+      {kind === 'file' && <a className="btn-primary grade-six-resource__file-link" href={resource.url} download={resource.url.endsWith('.pptx') || resource.url.endsWith('.ppt') || undefined} target="_blank" rel="noopener noreferrer">{resource.url.endsWith('.pptx') || resource.url.endsWith('.ppt') ? 'تنزيل العرض التقديمي PowerPoint' : 'فتح الملف ↗'}</a>}
     </article>
   );
 }

@@ -158,11 +158,24 @@
 .grade-six-resource__video-navigation button:disabled { opacity: .43; cursor: not-allowed; }
 .grade-six-resource__download { color: #2457a7; text-decoration: underline; font-weight: 800; }
 .grade-six-resource__pdf-link { margin: .5rem 0 1rem; }
-.grade-six-resource__pdf-preview { margin-top: 1rem; border: 1px solid #e1e8f1; border-radius: .8rem; background: #fff; overflow: hidden; }
-.grade-six-resource__pdf-preview summary { cursor: pointer; font-weight: 800; color: #2457a7; padding: .8rem 1rem; }
-.grade-six-resource__pdf-preview summary:focus-visible { outline: 3px solid #2457a7; outline-offset: -3px; }
-.grade-six-resource__pdf-preview iframe { width: 100%; height: min(78vh, 780px); display: block; border: none; }
 .grade-six-resource a:focus-visible { outline: 3px solid #2457a7; outline-offset: 3px; }
+.grade-six-resource__file-link { display: inline-block; margin: .5rem 0 .8rem; }
+.grade-six-booklet { display: grid; gap: .8rem; margin-top: 1rem; padding: clamp(.7rem, 2vw, 1.2rem); background: #f1f6fd; border: 1px solid #d3e2f4; border-radius: 1rem; color: #1e3655; }
+.grade-six-booklet h5 { font-size: 1.2rem; color: #183c72; }
+.grade-six-booklet > p { color: #536176; }
+.grade-six-booklet__navigation { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .65rem; }
+.grade-six-booklet__navigation button { padding: .4rem .85rem; cursor: pointer; }
+.grade-six-booklet__navigation button:disabled { cursor: not-allowed; opacity: .46; }
+.grade-six-booklet__navigation label { color: #183c72; font-weight: 800; }
+.grade-six-booklet__navigation select { font: inherit; border: 1px solid #aec7e4; border-radius: .6rem; padding: .45rem .7rem; color: #183c72; background: #fff; }
+.grade-six-booklet__page { max-width: 940px; width: 100%; margin: 0 auto !important; background: #fff; border: 1px solid #c9d6e5; border-radius: .55rem; overflow: hidden; box-shadow: 0 8px 24px rgba(24,60,114,.07); }
+.grade-six-booklet__page a { display: block; }
+.grade-six-booklet__page img { display: block; width: 100%; height: auto; border: 0; border-radius: 0; }
+.grade-six-booklet__page figcaption { margin: 0; text-align: center; background: #e9f2fc; padding: .45rem; font-weight: 800; color: #2457a7; }
+.grade-six-booklet__page-picker { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: .36rem; max-width: 940px; margin-inline: auto; }
+.grade-six-booklet__page-picker button { font: inherit; background: #fff; color: #2457a7; border: 1px solid #bcd1e9; min-width: 2.2rem; min-height: 2.2rem; border-radius: .5rem; cursor: pointer; }
+.grade-six-booklet__page-picker button.is-current { background: #2457a7; color: #fff; border-color: #2457a7; font-weight: 900; }
+.grade-six-booklet__page-picker button:focus-visible, .grade-six-booklet__navigation button:focus-visible, .grade-six-booklet__navigation select:focus-visible { outline: 3px solid #d9a92a; outline-offset: 2px; }
 .grade-six-home__heading { margin: 0 0 .3rem; color: #183c72; font-size: clamp(1.4rem, 3vw, 1.9rem); }
 .grade-six-home__intro { color: #526176; line-height: 1.85; }
 
@@ -237,7 +250,6 @@
   .grade-six-overview__header { padding: 1.35rem; }
   .grade-six-term-card { min-height: 245px; padding: 1.35rem; }
   .grade-six-term-two__empty { padding: 1.3rem; }
-  .grade-six-resource__pdf-preview iframe { height: 68vh; }
   .grade-six-inline-content__block { padding: .85rem; }
   .treasure-card { padding: .85rem; }
   .treasure-match-row, .treasure-scenario { grid-template-columns: 1fr; }

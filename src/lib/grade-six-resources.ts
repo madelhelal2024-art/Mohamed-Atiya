@@ -6,6 +6,7 @@ export interface GradeSixFile {
   description?: string;
   kind?: 'image' | 'video' | 'pdf' | 'file';
   parts?: string[];
+  pages?: string[];
 }
 
 export type GradeSixLessonFiles = Record<string, Partial<Record<SectionKey, GradeSixFile[]>>>;
@@ -39,6 +40,7 @@ export function validGradeSixFiles(
       entry &&
       typeof entry.title === 'string' && entry.title.trim() &&
       typeof entry.url === 'string' && isSafeGradeSixFileUrl(entry.url) &&
-      (!entry.parts || (Array.isArray(entry.parts) && entry.parts.length > 0 && entry.parts.every(isSafeGradeSixFileUrl)))
+      (!entry.parts || (Array.isArray(entry.parts) && entry.parts.length > 0 && entry.parts.every(isSafeGradeSixFileUrl))) &&
+      (!entry.pages || (Array.isArray(entry.pages) && entry.pages.length > 0 && entry.pages.every(isSafeGradeSixFileUrl)))
     ));
 }
